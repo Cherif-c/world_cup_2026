@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
+import { LiveScoresProvider } from "@/context/LiveScoresContext";
 import { ModelProvider } from "@/context/ModelContext";
 import "./globals.css";
 
@@ -33,7 +34,9 @@ export default function RootLayout({
     >
       <body className="font-sans">
         <ModelProvider>
-          <AppShell>{children}</AppShell>
+          <LiveScoresProvider>
+            <AppShell>{children}</AppShell>
+          </LiveScoresProvider>
         </ModelProvider>
       </body>
     </html>

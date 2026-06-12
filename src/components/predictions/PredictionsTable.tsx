@@ -1,24 +1,35 @@
+"use client";
+
+import { flattenMatches } from "@/data/matches";
+import { useLiveScores } from "@/context/LiveScoresContext";
 import {
-  computeStats,
-  flattenMatches,
-  formatDateFr,
-  involvesAlgeria,
-} from "@/data/matches";
-import { brierScore, getVerdict } from "@/lib/scoring";
+  computeLiveStats,
+  displayScore,
+  liveBrier,
+  liveVerdict,
+} from "@/lib/live/merge";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatPills } from "@/components/ui/StatPills";
 import { TeamCell } from "@/components/ui/TeamCell";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
+import { LiveBadge } from "@/components/ui/LiveBadge";
+import { LiveStatusBar } from "@/components/ui/LiveStatusBar";
+import { formatDateFr, involvesAlgeria } from "@/data/matches";
 
 export function PredictionsTable() {
   const matches = flattenMatches();
-  const stats = computeStats();
+  const { getUpdate, data } = useLiveScores();
+
+  const updatesMap = new Map(
+    data?.matches.map((u) => [u.matchId, u]) ?? []
+  );
+  const stats = computeLiveStats(matches, updatesMap);
 
   return (
     <>
       <PageHeader
         title="Prédictions"
-        subtitle="Comparaison tabulaire : probabilités 1X2, score prédit vs résultat réel, verdict et score de Brier."
+        subtitle="Scores mis à jour en direct via API-Football — probabilités 1X2, verdict et Brier recalculés à la fin des matchs."
       >
         <StatPills
           stats={[
@@ -37,10 +48,13 @@ export function PredictionsTable() {
                 stats.avgBrier !== null ? stats.avgBrier.toFixed(3) : "—",
               accent: "text-fifa-blue",
             },
+            { label: "En direct", value: stats.live, accent: "text-dz-red" },
             { label: "Restants", value: stats.upcoming },
           ]}
         />
       </PageHeader>
+
+      <LiveStatusBar />
 
       <div className="card-pro overflow-hidden">
         <div className="overflow-x-auto">
@@ -63,12 +77,13 @@ export function PredictionsTable() {
             </thead>
             <tbody>
               {matches.map((m) => {
-                const verdict = getVerdict(m.predictedScore, m.result);
-                const brier =
-                  m.result !== null
-                    ? brierScore(m.pred, m.result)
-                    : null;
+                const live = getUpdate(m.id);
+                const verdict = liveVerdict(m, live);
+                const brier = liveBrier(m, live);
+                const score = displayScore(m, live);
                 const algeria = involvesAlgeria(m);
+                const isLive =
+                  live?.status === "live" || live?.status === "halftime";
 
                 return (
                   <tr
@@ -111,15 +126,34 @@ export function PredictionsTable() {
                     <td className="text-center font-display text-base font-extrabold text-fifa-blue-dark">
                       {m.predictedScore}
                     </td>
-                    <td className="text-center font-display text-base font-bold">
-                      {m.result ? (
-                        <span className="text-dz-green">{m.result}</span>
+                    <td className="text-center font-display text-base font-extrabold">
+                      {score ? (
+                        <span
+                          className={
+                            isLive ? "text-dz-red" : "text-dz-green"
+                          }
+                        >
+                          {score}
+                          {live && (
+                            <LiveBadge
+                              status={live.status}
+                              label={live.statusLabel}
+                            />
+                          )}
+                        </span>
                       ) : (
                         <span className="text-ink-tertiary">—</span>
                       )}
                     </td>
                     <td>
-                      <VerdictBadge verdict={verdict} />
+                      {verdict === "live" || verdict === "halftime" ? (
+                        <LiveBadge
+                          status={verdict}
+                          label={live?.statusLabel ?? "LIVE"}
+                        />
+                      ) : (
+                        <VerdictBadge verdict={verdict} />
+                      )}
                     </td>
                     <td className="text-right font-mono text-xs font-semibold text-fifa-blue">
                       {brier !== null ? brier.toFixed(3) : "—"}
@@ -137,10 +171,7 @@ export function PredictionsTable() {
           {matches
             .filter((m) => m.revision)
             .map((m) => (
-              <p
-                key={m.id}
-                className="callout-dz text-xs"
-              >
+              <p key={m.id} className="callout-dz text-xs">
                 <span className="font-semibold text-ink">
                   {m.home} vs {m.away} :
                 </span>{" "}

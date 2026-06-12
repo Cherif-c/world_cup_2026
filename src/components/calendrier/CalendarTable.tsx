@@ -1,30 +1,48 @@
-import {
-  flattenMatches,
-  formatDateFr,
-  involvesAlgeria,
-} from "@/data/matches";
+"use client";
+
+import { flattenMatches, formatDateFr, involvesAlgeria } from "@/data/matches";
+import { useLiveScores } from "@/context/LiveScoresContext";
+import { displayScore, liveVerdict } from "@/lib/live/merge";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { TeamCell } from "@/components/ui/TeamCell";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
-import { getVerdict } from "@/lib/scoring";
+import { LiveBadge } from "@/components/ui/LiveBadge";
+import { LiveStatusBar } from "@/components/ui/LiveStatusBar";
 
 export function CalendarTable() {
   const matches = flattenMatches();
-  const played = matches.filter((m) => m.result).length;
+  const { getUpdate, data } = useLiveScores();
+
+  const played = matches.filter((m) => {
+    const live = getUpdate(m.id);
+    return live?.status === "finished" || (!live && m.result);
+  }).length;
+
+  const liveCount = data?.liveCount ?? 0;
 
   return (
     <>
       <PageHeader
         title="Calendrier"
-        subtitle="Programme complet de la phase de poules — journée 1 à 7."
+        subtitle="Programme phase de poules — scores synchronisés en direct."
       >
-        <div className="stat-pill">
-          <p className="stat-pill-label">Progression</p>
-          <p className="stat-pill-value text-dz-green">
-            {played}/{matches.length}
-          </p>
+        <div className="flex gap-2">
+          {liveCount > 0 && (
+            <div className="stat-pill border-dz-red/30">
+              <p className="stat-pill-label text-dz-red">En direct</p>
+              <p className="stat-pill-value text-dz-red">{liveCount}</p>
+            </div>
+          )}
+          <div className="stat-pill">
+            <p className="stat-pill-label">Joués</p>
+            <p className="stat-pill-value text-dz-green">
+              {played}/{matches.length}
+            </p>
+          </div>
         </div>
       </PageHeader>
+
+      <LiveStatusBar />
 
       <div className="card-pro overflow-hidden">
         <div className="overflow-x-auto">
@@ -44,7 +62,12 @@ export function CalendarTable() {
             </thead>
             <tbody>
               {matches.map((m) => {
-                const verdict = getVerdict(m.predictedScore, m.result);
+                const live = getUpdate(m.id);
+                const verdict = liveVerdict(m, live);
+                const score = displayScore(m, live);
+                const isLive =
+                  live?.status === "live" || live?.status === "halftime";
+
                 return (
                   <tr
                     key={m.id}
@@ -77,15 +100,28 @@ export function CalendarTable() {
                     <td className="max-w-[200px] truncate text-xs text-ink-secondary">
                       {m.venue}
                     </td>
-                    <td className="text-center font-display text-base font-bold">
-                      {m.result ? (
-                        <span className="text-dz-green">{m.result}</span>
+                    <td className="text-center font-display text-base font-extrabold">
+                      {score ? (
+                        <span
+                          className={
+                            isLive ? "text-dz-red" : "text-dz-green"
+                          }
+                        >
+                          {score}
+                        </span>
                       ) : (
                         <span className="text-ink-tertiary">—</span>
                       )}
                     </td>
                     <td>
-                      <VerdictBadge verdict={verdict} />
+                      {verdict === "live" || verdict === "halftime" ? (
+                        <LiveBadge
+                          status={verdict}
+                          label={live?.statusLabel ?? "LIVE"}
+                        />
+                      ) : (
+                        <VerdictBadge verdict={verdict} />
+                      )}
                     </td>
                   </tr>
                 );

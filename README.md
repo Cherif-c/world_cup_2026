@@ -23,9 +23,23 @@ npm install
 npm run dev
 ```
 
-## Saisir un résultat
+## Scores en direct (API-Football)
 
-`src/data/matches.ts` → `result: "2-1"` puis `git push` (Vercel redéploie).
+1. Créer un compte gratuit sur [api-football.com](https://www.api-football.com/)
+2. Copier la clé dans `.env.local` :
+
+```env
+API_FOOTBALL_KEY=votre_cle
+```
+
+3. Sur **Vercel** : Settings → Environment Variables → `API_FOOTBALL_KEY`
+4. Les pages Prédictions et Calendrier se rafraîchissent toutes les **30 s** (match en cours) ou **2 min** (sinon)
+
+Sans clé API, les scores statiques de `matches.ts` sont utilisés.
+
+## Saisir un résultat (fallback manuel)
+
+`src/data/matches.ts` → `result: "2-1"` si pas d'API.
 
 ## Modèle Python
 
