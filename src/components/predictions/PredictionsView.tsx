@@ -37,7 +37,7 @@ export function PredictionsView() {
             {
               label: "Scores exacts",
               value: stats.exact,
-              accent: "text-fifa-blue",
+              accent: "text-accent-emerald",
             },
             {
               label: "Brier moy.",

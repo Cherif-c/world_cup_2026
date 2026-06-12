@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { EnrichedMatch } from "@/lib/model/enrich";
 import {
   displayScore,
@@ -23,6 +24,7 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
     verdict1x2 !== "live" && verdict1x2 !== "halftime";
 
   return (
+    <Link href={`/suivi/${match.id}`} className="block">
     <article
       className={`match-card ${algeria ? "match-card-algeria" : ""}`}
     >
@@ -102,5 +104,6 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
         )}
       </div>
     </article>
+    </Link>
   );
 }

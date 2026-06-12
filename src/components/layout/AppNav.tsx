@@ -6,6 +6,7 @@ import { FlagIcon } from "@/components/ui/FlagIcon";
 
 const NAV = [
   { href: "/predictions", label: "Prédictions" },
+  { href: "/suivi", label: "Suivi live" },
   { href: "/classement", label: "Classement" },
   { href: "/parametres", label: "Paramètres" },
   { href: "/doc", label: "Documentation" },
@@ -24,7 +25,7 @@ export function AppNav() {
             href="/predictions"
             className="flex shrink-0 items-center gap-3 rounded-card px-2 py-1 transition hover:bg-white/5"
           >
-            <div className="overflow-hidden rounded-full ring-2 ring-dz-green ring-offset-1 ring-offset-fifa-blue-dark">
+            <div className="overflow-hidden rounded-full ring-2 ring-dz-green ring-offset-1 ring-offset-accent-charcoal">
               <FlagIcon team="Algérie" size={36} className="rounded-full" />
             </div>
             <div className="hidden sm:block">
@@ -64,7 +65,7 @@ export function AppNav() {
         </div>
       </div>
 
-      <div className="h-0.5 bg-fifa-blue-mid" />
+      <div className="h-0.5 bg-accent-emerald" />
     </header>
   );
 }

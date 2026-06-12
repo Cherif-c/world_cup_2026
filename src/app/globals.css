@@ -12,14 +12,14 @@
   body {
     @apply bg-surface-page text-ink antialiased;
     background-image:
-      radial-gradient(ellipse at 0% 0%, rgba(0, 98, 51, 0.07) 0%, transparent 50%),
-      radial-gradient(ellipse at 100% 100%, rgba(210, 16, 52, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 0%, rgba(0, 48, 135, 0.1) 0%, transparent 60%);
+      radial-gradient(ellipse at 0% 0%, rgba(0, 98, 51, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(210, 16, 52, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 0%, rgba(5, 150, 105, 0.07) 0%, transparent 55%);
     background-attachment: fixed;
   }
 
   ::selection {
-    @apply bg-dz-green/30 text-fifa-blue-dark;
+    @apply bg-accent-emerald/25 text-fifa-blue-dark;
   }
 }
 
@@ -29,7 +29,7 @@
   }
 
   .table-pro thead th {
-    @apply sticky top-0 z-10 border-b-2 border-fifa-blue bg-fifa-blue px-4 py-3 text-left text-[11px] font-bold uppercase tracking-widest text-white;
+    @apply sticky top-0 z-10 border-b-2 border-accent-emerald bg-accent-charcoal px-4 py-3 text-left text-[11px] font-bold uppercase tracking-widest text-white;
   }
 
   .table-pro tbody td {
@@ -53,7 +53,7 @@
   }
 
   .input-pro:focus {
-    @apply border-fifa-blue ring-2 ring-fifa-blue/20;
+    @apply border-accent-emerald ring-2 ring-accent-emerald/20;
   }
 
   .btn-primary {
@@ -61,15 +61,15 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-card border-2 border-fifa-blue/40 bg-transparent px-4 py-2 text-sm font-semibold text-fifa-blue transition hover:bg-fifa-blue hover:text-white;
+    @apply inline-flex items-center justify-center rounded-card border-2 border-accent-emerald/40 bg-transparent px-4 py-2 text-sm font-semibold text-accent-emerald transition hover:bg-accent-emerald hover:text-white;
   }
 
   .card-pro {
-    @apply overflow-hidden rounded-card-lg border border-fifa-blue/10 bg-surface-card shadow-card;
+    @apply overflow-hidden rounded-card-lg border border-accent-emerald/10 bg-surface-card shadow-card;
   }
 
   .card-pro-header {
-    @apply border-b border-fifa-blue/20 bg-fifa-blue px-4 py-3;
+    @apply border-b border-accent-emerald/20 bg-accent-charcoal px-4 py-3;
   }
 
   .card-pro-header h2 {
@@ -81,7 +81,7 @@
   }
 
   .page-title {
-    @apply font-display text-3xl font-extrabold uppercase tracking-tight text-fifa-blue-dark sm:text-4xl;
+    @apply font-display text-3xl font-extrabold uppercase tracking-tight text-accent-charcoal sm:text-4xl;
   }
 
   .page-title-accent {
@@ -117,32 +117,32 @@
   }
 
   .stat-pill {
-    @apply rounded-card border-2 border-fifa-blue/15 bg-surface-card px-4 py-2.5 shadow-sm;
+    @apply rounded-card border-2 border-accent-emerald/15 bg-surface-card px-4 py-2.5 shadow-sm;
   }
 
   .stat-pill-label {
-    @apply text-[10px] font-bold uppercase tracking-widest text-fifa-blue;
+    @apply text-[10px] font-bold uppercase tracking-widest text-accent-emerald;
   }
 
   .stat-pill-value {
-    @apply font-display text-xl font-extrabold tabular-nums text-fifa-blue-dark;
+    @apply font-display text-xl font-extrabold tabular-nums text-accent-charcoal;
   }
 
   .segmented {
-    @apply inline-flex rounded-card-lg border-2 border-fifa-blue/15 bg-surface-card p-1 shadow-sm;
+    @apply inline-flex rounded-card-lg border-2 border-accent-emerald/15 bg-surface-card p-1 shadow-sm;
   }
 
   .segmented-btn {
-    @apply rounded-card px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-fifa-blue transition;
+    @apply rounded-card px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-accent-emerald transition;
   }
 
   .segmented-btn-active {
-    @apply bg-fifa-blue text-white shadow-md;
+    @apply bg-accent-emerald text-white shadow-md;
   }
 
   /* ── Match card ── */
   .match-card {
-    @apply overflow-hidden rounded-card border border-line-soft bg-surface shadow-sm transition hover:border-fifa-blue/25 hover:shadow-glow;
+    @apply overflow-hidden rounded-card border border-line-soft bg-surface shadow-sm transition hover:border-accent-emerald/30 hover:shadow-glow;
   }
 
   .match-card-algeria {
@@ -159,7 +159,7 @@
   }
 
   .match-card-score {
-    @apply font-display text-xl font-extrabold tabular-nums text-fifa-blue-dark;
+    @apply font-display text-xl font-extrabold tabular-nums text-accent-charcoal;
   }
 
   .match-card-pick {
@@ -203,7 +203,7 @@
   }
 
   .badge-neutral {
-    @apply border border-fifa-blue/25 bg-fifa-blue/5 text-fifa-blue;
+    @apply border border-accent-emerald/25 bg-accent-emerald/5 text-accent-emerald;
   }
 
   .badge-success {
@@ -211,7 +211,7 @@
   }
 
   .badge-info {
-    @apply bg-fifa-blue text-white;
+    @apply bg-accent-emerald text-white;
   }
 
   .badge-error {
@@ -224,6 +224,171 @@
 
   .badge-exact {
     @apply border border-dz-green/40 bg-dz-green/10 text-dz-green;
+  }
+
+  /* ── Suivi / analytics ── */
+  .score-hero {
+    @apply overflow-hidden rounded-card-lg border border-white/10 bg-fifa-header p-5 shadow-card-lg sm:p-8;
+  }
+
+  .score-hero-live {
+    box-shadow:
+      0 0 0 1px rgba(210, 16, 52, 0.35),
+      0 12px 40px rgba(210, 16, 52, 0.15);
+  }
+
+  .score-hero-algeria {
+    @apply border-dz-green/40;
+    box-shadow: inset 4px 0 0 #006233;
+  }
+
+  .score-hero-meta {
+    @apply mb-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] font-semibold uppercase tracking-widest text-ink-onDark-muted;
+  }
+
+  .score-hero-grid {
+    @apply grid grid-cols-[1fr_auto_1fr] items-center gap-4;
+  }
+
+  .score-hero-team-away {
+    @apply justify-self-end;
+  }
+
+  .score-hero-center {
+    @apply text-center;
+  }
+
+  .score-hero-score {
+    @apply font-display text-5xl font-extrabold tabular-nums tracking-tight text-white sm:text-6xl;
+  }
+
+  .score-hero-sep {
+    @apply mx-2 text-ink-onDark-muted;
+  }
+
+  .score-hero-kickoff {
+    @apply font-display text-3xl font-bold text-ink-onDark-muted;
+  }
+
+  .score-hero-possession {
+    @apply mt-8 grid grid-cols-[auto_1fr_auto_1fr_auto] items-center gap-2 text-white;
+  }
+
+  .score-hero-poss-bar {
+    @apply h-1.5 overflow-hidden rounded-full bg-white/10;
+  }
+
+  .score-hero-poss-home {
+    @apply h-full rounded-full bg-accent-emerald-bright;
+  }
+
+  .score-hero-poss-away {
+    @apply ml-auto h-full rounded-full bg-dz-red;
+  }
+
+  .analytics-tabs {
+    @apply flex flex-wrap gap-2 rounded-card-lg border border-line-soft bg-surface p-1.5 shadow-sm;
+  }
+
+  .analytics-tab {
+    @apply rounded-card px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-ink-secondary transition hover:bg-surface-muted hover:text-accent-emerald;
+  }
+
+  .analytics-tab-active {
+    @apply bg-accent-charcoal text-white shadow-md;
+  }
+
+  .card-analytics {
+    @apply overflow-hidden rounded-card-lg border border-line-soft bg-surface-card shadow-card;
+  }
+
+  .card-analytics-header {
+    @apply flex items-center border-b border-line-soft bg-surface-muted/60 px-5 py-3.5;
+  }
+
+  .card-analytics-header h2 {
+    @apply font-display text-sm font-bold uppercase tracking-wide text-accent-charcoal;
+  }
+
+  .analytics-pills {
+    @apply inline-flex rounded-full border border-line-soft bg-surface p-0.5;
+  }
+
+  .analytics-pill {
+    @apply rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-ink-tertiary transition;
+  }
+
+  .analytics-pill-active {
+    @apply bg-accent-emerald text-white;
+  }
+
+  .timeline-item {
+    @apply flex items-start gap-3 border-l-2 border-line-soft py-2.5 pl-4;
+  }
+
+  .timeline-item-goal {
+    @apply border-l-accent-emerald bg-accent-emerald/[0.04];
+  }
+
+  .timeline-minute {
+    @apply w-8 shrink-0 font-mono text-xs font-bold tabular-nums text-accent-emerald;
+  }
+
+  .timeline-icon {
+    @apply w-5 shrink-0 text-center text-sm;
+  }
+
+  .suivi-card {
+    @apply block rounded-card-lg border border-line-soft bg-surface-card p-4 shadow-sm transition hover:border-accent-emerald/35 hover:shadow-glow;
+  }
+
+  .suivi-card-algeria {
+    @apply border-dz-green/30 bg-gradient-to-br from-dz-green/[0.05] to-surface-card;
+    box-shadow: inset 3px 0 0 #006233;
+  }
+
+  .suivi-card-live {
+    @apply border-dz-red/30 ring-1 ring-dz-red/20;
+  }
+
+  .team-filter-chip {
+    @apply inline-flex items-center gap-2 rounded-card border border-line-soft bg-surface px-3 py-2 text-xs text-ink-secondary shadow-sm transition hover:border-accent-emerald/30 hover:shadow-md;
+  }
+
+  .team-filter-chip-active {
+    @apply border-accent-emerald/50 bg-accent-emerald/[0.08] text-ink shadow-md ring-1 ring-accent-emerald/25;
+  }
+
+  .team-filter-count {
+    @apply rounded-full bg-surface-muted px-2 py-0.5 font-mono text-[10px] font-bold tabular-nums text-ink-tertiary;
+  }
+
+  .team-filter-chip-active .team-filter-count {
+    @apply bg-accent-emerald/15 text-accent-emerald;
+  }
+
+  .pitch-frame {
+    @apply overflow-hidden rounded-card-lg p-1;
+    background: linear-gradient(145deg, #1a1f2e 0%, #0c1220 100%);
+    box-shadow:
+      0 20px 50px rgba(12, 18, 32, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .pitch-svg {
+    @apply mx-auto block w-full max-w-3xl;
+  }
+
+  .heat-legend-bar {
+    background: linear-gradient(
+      90deg,
+      #14532d 0%,
+      #22c55e 18%,
+      #a3e635 38%,
+      #f97316 62%,
+      #ef4444 100%
+    );
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
   }
 }
 
