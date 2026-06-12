@@ -1,6 +1,7 @@
 "use client";
 
 import type { MatchDetail } from "@/lib/live/match-detail-types";
+import { brierScore, getVerdict, VERDICT_LABELS } from "@/lib/scoring";
 
 export function ModelInsight({
   detail,
@@ -60,14 +61,29 @@ export function ModelInsight({
             <p className="mt-4 font-display text-4xl font-extrabold tabular-nums text-ink">
               {actual}
             </p>
-            <p className="mt-4 text-sm text-ink-secondary">
-              {actual === enriched.predictedScore
-                ? "Score exact — le modèle a visé juste."
-                : `Écart de ${Math.abs(
-                    (detail.homeScore ?? 0) -
-                      parseInt(enriched.predictedScore.split("-")[0], 10)
-                  )} but(s) domicile.`}
-            </p>
+            {(() => {
+              const v = getVerdict(enriched.predictedScore, actual);
+              const brier = brierScore(enriched.pred, actual);
+              const tone =
+                v === "exact"
+                  ? "text-dz-green"
+                  : v === "vainqueur"
+                    ? "text-accent-gold"
+                    : "text-dz-red";
+              return (
+                <p className="mt-4 text-sm text-ink-secondary">
+                  Verdict :{" "}
+                  <span className={`font-bold ${tone}`}>
+                    {v ? VERDICT_LABELS[v] : "—"}
+                  </span>
+                  {" · "}Brier du match :{" "}
+                  <span className="font-mono font-semibold">
+                    {brier.toFixed(3)}
+                  </span>
+                  <span className="text-ink-tertiary"> (chance pure : 0,667)</span>
+                </p>
+              );
+            })()}
           </>
         ) : (
           <p className="mt-4 text-sm text-ink-secondary">

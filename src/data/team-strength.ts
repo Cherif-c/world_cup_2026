@@ -65,7 +65,9 @@ export const TEAM_STRENGTH: Record<string, StrengthAdj> = {
 
   // ——— Groupe J ———
   Argentine: { attack: 0.32, defense: 0.18 },
-  Algérie: { attack: 0.4, defense: 0.28 },
+  // Niveau Maroc/Sénégal — déjà généreux. L'ancien 0.40/0.28 faisait de
+  // l'Algérie la meilleure attaque du tournoi devant l'Espagne : biais pur.
+  Algérie: { attack: 0.15, defense: 0.12 },
   Autriche: { attack: 0.1, defense: 0.12 },
   Jordanie: { attack: -0.38, defense: -0.62 },
 

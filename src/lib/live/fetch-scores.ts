@@ -28,9 +28,6 @@ function staticFallback(message?: string): LiveApiResponse {
 }
 
 export async function getLiveScores(): Promise<LiveApiResponse> {
-  const hasLive = (cache?.data.liveCount ?? 0) > 0;
-  const ttl = hasLive ? 8_000 : 45_000;
-
   if (cache && Date.now() < cache.expires) {
     return cache.data;
   }
@@ -55,6 +52,9 @@ export async function getLiveScores(): Promise<LiveApiResponse> {
       matches: updates,
     };
 
+    // TTL dérivé de l'état FRAIS (l'ancien code utilisait le cache
+    // précédent → un cycle de retard quand un match passait live).
+    const ttl = liveCount > 0 ? 8_000 : 45_000;
     cache = { data, expires: Date.now() + ttl };
     return data;
   } catch (espnErr) {

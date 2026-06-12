@@ -145,7 +145,8 @@ function mapStatus(comp: EspnCompetition): {
     return { status: "scheduled", label: "À venir", minute: null };
   }
   const desc = type.description.toLowerCase();
-  if (desc.includes("half") && type.state === "in") {
+  // "Halftime" = pause ; "First/Second Half" = en cours — ne pas confondre.
+  if (type.state === "in" && (desc.startsWith("halftime") || desc === "ht")) {
     return { status: "halftime", label: "Mi-temps", minute };
   }
   if (type.state === "in") {

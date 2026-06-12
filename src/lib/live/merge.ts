@@ -21,7 +21,9 @@ export function resultForVerdict(
   live?: LiveMatchUpdate
 ): string | null {
   if (live?.status === "finished" && live.scoreText) return live.scoreText;
-  if (!live && match.result) return match.result;
+  // Fallback manuel : si ESPN n'a pas (encore) le match terminé,
+  // le résultat saisi dans fixtures.ts fait foi.
+  if (match.result) return match.result;
   return null;
 }
 

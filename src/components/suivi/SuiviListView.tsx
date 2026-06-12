@@ -32,7 +32,7 @@ export function SuiviListView() {
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {sorted.map((m) => {
           const live = m.live;
-          const score = displayScore({ ...m, result: null }, live);
+          const score = displayScore({ ...m, result: m.result ?? null }, live);
           const isLive =
             live?.status === "live" || live?.status === "halftime";
           const algeria = involvesAlgeria(m);

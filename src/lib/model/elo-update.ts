@@ -41,9 +41,10 @@ function matchSortKey(f: Fixture): string {
   return `${f.date}T${f.kickoff}`;
 }
 
-/** K dérivé de eloPerGd : ~137 pts/but → K ≈ 29 */
+/** K dérivé de eloPerGd — norme eloratings.net : K = 60 en finale de CDM.
+ *  8000 / 137 ≈ 58, borné [40, 70]. (L'ancien 4000/x ≈ 29 sous-réagissait.) */
 export function eloK(eloPerGd: number): number {
-  return Math.max(20, Math.min(40, Math.round(4000 / eloPerGd)));
+  return Math.max(40, Math.min(70, Math.round(8000 / eloPerGd)));
 }
 
 export function buildEloTimeline(
@@ -59,17 +60,14 @@ export function buildEloTimeline(
   const finished = fixtures
     .filter((f) => {
       const live = liveMap.get(f.id);
-      return (
-        live?.status === "finished" &&
-        !!resultForVerdict({ ...f, result: null }, live)
-      );
+      return !!resultForVerdict({ ...f, result: f.result ?? null }, live);
     })
     .sort((a, b) => matchSortKey(a).localeCompare(matchSortKey(b)));
 
   for (const f of finished) {
     beforeMatch.set(f.id, { ...elo });
-    const live = liveMap.get(f.id)!;
-    const score = resultForVerdict({ ...f, result: null }, live)!;
+    const live = liveMap.get(f.id);
+    const score = resultForVerdict({ ...f, result: f.result ?? null }, live)!;
     applyEloResult(elo, f.home, f.away, score, k);
   }
 

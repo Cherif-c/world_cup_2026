@@ -106,14 +106,14 @@ export function computeGroupStandings(
   const rows = new Map(teams.map((t) => [t, emptyRow(t)]));
 
   for (const m of matches.filter((x) => x.group === group)) {
-    const result = resultForVerdict({ ...m, result: null }, m.live);
+    const result = resultForVerdict({ ...m, result: m.result ?? null }, m.live);
     if (result) {
       applyResult(rows, m.home, m.away, result);
     }
   }
 
   for (const m of matches.filter((x) => x.group === group)) {
-    const result = resultForVerdict({ ...m, result: null }, m.live);
+    const result = resultForVerdict({ ...m, result: m.result ?? null }, m.live);
     if (result) continue;
 
     const rh = rows.get(m.home)!;

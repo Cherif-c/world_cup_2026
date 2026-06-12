@@ -121,7 +121,7 @@ export function computePredictionStats(matches: EnrichedMatch[]) {
       live++;
       continue;
     }
-    const result = resultForVerdict({ ...m, result: null }, m.live);
+    const result = resultForVerdict({ ...m, result: m.result ?? null }, m.live);
     if (!result) {
       upcoming++;
       continue;

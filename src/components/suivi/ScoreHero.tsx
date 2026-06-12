@@ -9,9 +9,13 @@ import { involvesAlgeria } from "@/data/fixtures";
 export function ScoreHero({
   detail,
   isLive,
+  group,
+  matchday,
 }: {
   detail: MatchDetail;
   isLive: boolean;
+  group?: string;
+  matchday?: number;
 }) {
   const algeria = involvesAlgeria(detail);
   const hasScore =
@@ -22,7 +26,11 @@ export function ScoreHero({
       className={`score-hero ${algeria ? "score-hero-algeria" : ""} ${isLive ? "score-hero-live" : ""}`}
     >
       <div className="score-hero-meta">
-        <span>Groupe · Journée</span>
+        <span>
+          {group ? `Groupe ${group}` : ""}
+          {group && matchday ? " · " : ""}
+          {matchday ? `Journée ${matchday}` : ""}
+        </span>
         <time dateTime={detail.date}>{formatDateFr(detail.date)}</time>
         {detail.venue && <span className="hidden sm:inline">{detail.venue}</span>}
       </div>

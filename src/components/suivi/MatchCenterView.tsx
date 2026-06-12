@@ -13,6 +13,8 @@ type Tab = "stats" | "pitch" | "model" | "feed";
 export function MatchCenterView({
   detail,
   enriched,
+  group,
+  matchday,
 }: {
   detail: MatchDetail;
   enriched?: {
@@ -20,6 +22,8 @@ export function MatchCenterView({
     pred: [number, number, number];
     pick1x2Label: string;
   };
+  group?: string;
+  matchday?: number;
 }) {
   const [tab, setTab] = useState<Tab>("stats");
   const isLive =
@@ -34,7 +38,7 @@ export function MatchCenterView({
 
   return (
     <div className="space-y-6">
-      <ScoreHero detail={detail} isLive={isLive} />
+      <ScoreHero detail={detail} isLive={isLive} group={group} matchday={matchday} />
 
       <div className="analytics-tabs">
         {tabs.map((t) => (

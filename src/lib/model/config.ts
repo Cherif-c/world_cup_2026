@@ -56,7 +56,9 @@ export const DEFAULT_MODEL_CONFIG: ModelConfig = {
     Irak: 1650,
     Argentine: 2150,
     Autriche: 1860,
-    Algérie: 1845,
+    // eloratings.net a l'Algérie ~1790. La valeur 1845 était du biais
+    // supporter — le Brier tracker le facture. Rester honnête ici.
+    Algérie: 1795,
     Jordanie: 1645,
     Portugal: 2010,
     Colombie: 1950,

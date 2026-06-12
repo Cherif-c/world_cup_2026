@@ -93,66 +93,28 @@ export function intensitesFromStrength(
   return [la, lb];
 }
 
+/**
+ * Score affiché = mode de la matrice Dixon-Coles. Un seul tie-break :
+ * sur un match équilibré, si le 1-1 est quasi aussi probable que le mode
+ * (≥ 90 %), on préfère le nul à un 1-0 « pile ou face ».
+ *
+ * L'ancienne version empilait des heuristiques à seuils magiques
+ * (cas spéciaux 4-0, etc.) — invendable et impossible à backtester.
+ * Si tu veux un score plus agressif, ajuste λ via team-strength,
+ * pas la règle de lecture de la matrice.
+ */
 export function pickPredictedScore(
   matrix: Map<string, number>,
   la: number,
   lb: number,
-  maxGoals: number
+  _maxGoals: number
 ): string {
-  const rx = Math.min(maxGoals, Math.max(0, Math.round(la)));
-  const ry = Math.min(maxGoals, Math.max(0, Math.round(lb)));
-  const rounded = `${rx}-${ry}`;
-  const roundedProb = matrix.get(rounded) ?? 0;
-
   const top = [...matrix.entries()].sort((a, b) => b[1] - a[1]);
-  const [mode, modeProb] = top[0] ?? ["0-0", 0];
+  const [mode, modeProb] = top[0] ?? ["1-1", 0];
 
-  if (Math.abs(la - lb) <= 0.95 && la + lb <= 3.5) {
+  if (Math.abs(la - lb) <= 0.35) {
     const drawProb = matrix.get("1-1") ?? 0;
-    if (drawProb >= modeProb * 0.72) return "1-1";
-    const narrow = la >= lb ? "1-0" : "0-1";
-    const narrowProb = matrix.get(narrow) ?? 0;
-    if (narrowProb >= modeProb * 0.65) return narrow;
-  }
-
-  if (lb <= 0.4 && la >= 0.9 && la <= 2.6) {
-    const oneZero = "1-0";
-    const p = matrix.get(oneZero) ?? 0;
-    if (p >= modeProb * 0.5) return oneZero;
-  }
-
-  if (la >= 3.0 && la <= 4.25 && lb <= 0.18) {
-    const fourZero = matrix.get("4-0") ?? 0;
-    if (fourZero >= 0.12) return "4-0";
-  }
-
-  if (rx + ry >= 3 && roundedProb >= modeProb * 0.45) return rounded;
-
-  if (la >= 2.2 && lb <= 0.5) {
-    const fourZero = matrix.get("4-0") ?? 0;
-    const threeZero = matrix.get("3-0") ?? 0;
-    if (fourZero >= modeProb * 0.32 || fourZero >= threeZero * 0.72) {
-      return "4-0";
-    }
-  }
-
-  if (la >= 2.4 && lb <= 0.65) {
-    const blowout = top.find(([s]) => {
-      const [x, y] = s.split("-").map(Number);
-      return x >= 3 && y <= 1;
-    });
-    if (blowout && blowout[1] >= modeProb * 0.42) return blowout[0];
-  }
-
-  if (rx + ry >= 2 && roundedProb >= modeProb * 0.6) return rounded;
-
-  const [mx, my] = mode.split("-").map(Number);
-  if (mx + my <= 1 && la + lb >= 2.4) {
-    const alt = top.find(([s]) => {
-      const [x, y] = s.split("-").map(Number);
-      return x + y >= 2 && x + y <= 5;
-    });
-    if (alt && alt[1] >= modeProb * 0.72) return alt[0];
+    if (drawProb >= modeProb * 0.9) return "1-1";
   }
 
   return mode;

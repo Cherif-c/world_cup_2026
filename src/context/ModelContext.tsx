@@ -11,7 +11,9 @@ import {
 import { DEFAULT_MODEL_CONFIG } from "@/lib/model/config";
 import type { ModelConfig } from "@/lib/model/types";
 
-const STORAGE_KEY = "wc26-model-config";
+// v2 : invalide les configs stockées avant la correction de calibration
+// (Elo Algérie, cotes inversées) — incrémenter à chaque changement de défauts.
+const STORAGE_KEY = "wc26-model-config-v2";
 
 interface ModelContextValue {
   config: ModelConfig;

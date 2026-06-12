@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useModelConfig } from "@/context/ModelContext";
 import { FIXTURES } from "@/data/fixtures";
+import { auditOddsAgainstElo } from "@/data/odds";
 import { priceMatch } from "@/lib/model/engine";
 import type { ContextAdj, GlobalParams } from "@/lib/model/types";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -15,12 +16,13 @@ const GLOBAL_FIELDS: {
   hint?: string;
 }[] = [
   { key: "muTotal", label: "μ — total buts (défaut)", step: 0.05 },
-  { key: "eloPerGd", label: "Pts Elo / but d'écart", step: 1, hint: "K Elo dynamique ≈ 4000 / valeur" },
+  { key: "eloPerGd", label: "Pts Elo / but d'écart", step: 1, hint: "K Elo dynamique ≈ 8000 / valeur (≈ 60, norme CDM)" },
   { key: "rhoDc", label: "ρ Dixon-Coles", step: 0.01 },
   { key: "lambdaMin", label: "λ plancher", step: 0.05 },
   { key: "zCred", label: "z crédibilité Bühlmann", step: 0.05, hint: "Poids modèle vs marché (J1)" },
-  { key: "maxGoals", label: "Troncature matrice", step: 1 },
-  { key: "ratioExponent", label: "Exposant ratio λ", step: 0.05 },
+  { key: "maxGoals", label: "Troncature matrice", step: 1, hint: "Borné à [4, 12]" },
+  // ratioExponent retiré : paramètre mort depuis le modèle attaque/défense
+  // (conservé dans le type pour parité avec wc26_model.py).
 ];
 
 const MU_MATCHDAY: { md: 1 | 2 | 3; label: string }[] = [
@@ -57,6 +59,15 @@ export function ParametresPanel() {
     () => Object.keys(config.elo).sort((a, b) => a.localeCompare(b, "fr")),
     [config.elo]
   );
+
+  // Garde-fou : signale en dev toute cote marché dont le favori contredit
+  // l'Elo (symptôme classique d'une saisie inversée domicile/extérieur).
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    for (const w of auditOddsAgainstElo(config.elo, FIXTURES)) {
+      console.warn(`[audit cotes] ${w}`);
+    }
+  }, [config.elo]);
 
   const marketOdds = useMemo(() => {
     const o1 = parseFloat(odds1);
@@ -112,9 +123,11 @@ export function ParametresPanel() {
                   type="number"
                   step={step}
                   value={config.global[key] as number}
-                  onChange={(e) =>
-                    updateGlobal({ [key]: parseFloat(e.target.value) || 0 })
-                  }
+                  onChange={(e) => {
+                    let v = parseFloat(e.target.value) || 0;
+                    if (key === "maxGoals") v = Math.max(4, Math.min(12, Math.round(v) || 8));
+                    updateGlobal({ [key]: v });
+                  }}
                   className="input-pro font-mono"
                 />
                 {hint && (
@@ -327,6 +340,19 @@ export function ParametresPanel() {
               placeholder="3.80"
               value={oddsN}
               onChange={(e) => setOddsN(e.target.value)}
+              className="input-pro font-mono"
+            />
+          </label>
+          <label>
+            <span className="mb-1 block text-xs text-ink-secondary">
+              Cote 2 (marché)
+            </span>
+            <input
+              type="number"
+              step={0.01}
+              placeholder="5.20"
+              value={odds2}
+              onChange={(e) => setOdds2(e.target.value)}
               className="input-pro font-mono"
             />
           </label>

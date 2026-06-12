@@ -20,6 +20,7 @@ export default function SuiviMatchPage() {
 
   useEffect(() => {
     let cancelled = false;
+    let interval: ReturnType<typeof setInterval> | null = null;
 
     async function load() {
       try {
@@ -33,6 +34,11 @@ export default function SuiviMatchPage() {
         if (!cancelled) {
           setDetail(data as MatchDetail);
           setError(null);
+          // Match terminé → inutile de re-poller ESPN toutes les 20 s.
+          if ((data as MatchDetail).status === "finished" && interval) {
+            clearInterval(interval);
+            interval = null;
+          }
         }
       } catch (e) {
         if (!cancelled) {
@@ -44,10 +50,10 @@ export default function SuiviMatchPage() {
     }
 
     load();
-    const interval = setInterval(load, 20_000);
+    interval = setInterval(load, 20_000);
     return () => {
       cancelled = true;
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     };
   }, [matchId]);
 
@@ -86,6 +92,8 @@ export default function SuiviMatchPage() {
       {detail && (
         <MatchCenterView
           detail={detail}
+          group={fixture.group}
+          matchday={fixture.matchday}
           enriched={
             enriched
               ? {

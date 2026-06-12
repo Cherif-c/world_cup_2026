@@ -72,8 +72,10 @@ function mapEspnStatus(comp: EspnEvent["competitions"][0]): {
     return { status: "scheduled", label: "À venir", minute: null };
   }
 
+  // ESPN : description "Halftime" pour la pause, mais "First Half" /
+  // "Second Half" pour le jeu en cours — includes("half") matchait tout.
   const desc = type.description.toLowerCase();
-  if (desc.includes("half") && type.state === "in") {
+  if (type.state === "in" && (desc.startsWith("halftime") || desc === "ht")) {
     return { status: "halftime", label: "Mi-temps", minute };
   }
 

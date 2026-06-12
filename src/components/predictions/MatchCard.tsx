@@ -16,7 +16,7 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
   const live = match.live;
   const verdictScore = liveVerdict(match, live);
   const verdict1x2 = liveVerdict1x2(match, live);
-  const score = displayScore({ ...match, result: null }, live);
+  const score = displayScore({ ...match, result: match.result ?? null }, live);
   const isLive =
     live?.status === "live" || live?.status === "halftime";
   const algeria = involvesAlgeria(match);

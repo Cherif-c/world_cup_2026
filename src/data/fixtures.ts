@@ -10,6 +10,8 @@ export interface Fixture {
   kickoff: string;
   venue: string;
   revision?: string;
+  /** Résultat de secours "x-y" — utilisé si ESPN est indisponible */
+  result?: string;
 }
 
 /** Round-robin 4 équipes : J1 (0-1,2-3), J2 (0-2,1-3), J3 (0-3,1-2) */
@@ -40,11 +42,13 @@ const J1_OVERRIDES: Record<string, Partial<Fixture>> = {
     date: "2026-06-11",
     kickoff: "14:00",
     venue: "Estadio Azteca, Mexico",
+    result: "2-0",
   },
   "a-md1-2-3": {
     date: "2026-06-11",
     kickoff: "20:00",
     venue: "Estadio Guadalajara",
+    result: "2-1",
     revision:
       "Match serré — le modèle privilégie le 1X2 (Corée) plutôt que le score exact.",
   },
@@ -60,13 +64,13 @@ const J1_OVERRIDES: Record<string, Partial<Fixture>> = {
   },
   "c-md1-0-1": {
     date: "2026-06-13",
-    kickoff: "20:00",
-    venue: "Gillette Stadium, Boston",
+    kickoff: "18:00",
+    venue: "MetLife Stadium, New York/NJ",
   },
   "c-md1-2-3": {
     date: "2026-06-13",
-    kickoff: "17:00",
-    venue: "MetLife Stadium, New York/NJ",
+    kickoff: "21:00",
+    venue: "Gillette Stadium, Boston",
   },
   "d-md1-0-1": {
     date: "2026-06-12",
@@ -142,7 +146,7 @@ const J1_OVERRIDES: Record<string, Partial<Fixture>> = {
     date: "2026-06-24",
     kickoff: "20:00",
     venue: "Lumen Field, Seattle",
-    revision: "Thèse : 4-0 — attaque algérienne vs bloc jordanien perméable.",
+    revision: "Algérie nettement favorite — le modèle vise une victoire confortable.",
   },
   "j-md3-1-2": {
     date: "2026-06-28",
