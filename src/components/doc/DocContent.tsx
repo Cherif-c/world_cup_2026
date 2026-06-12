@@ -31,8 +31,8 @@ export function DocContent() {
       />
 
       <div className="card-pro p-6 sm:p-8">
-        <p className="mb-6 rounded-apple border border-dz-green/20 bg-dz-green/5 px-4 py-3 text-sm text-ink-secondary">
-          <strong className="text-dz-green">Cadre actuariel.</strong> Le modèle
+        <p className="callout-dz mb-6">
+          <strong className="font-bold text-dz-green">Cadre actuariel.</strong> Le modèle
           combine une estimation structurelle (Elo → intensités Poisson) avec une
           pondération de crédibilité contre le marché — exactement la logique
           Bühlmann : expérience propre vs expérience du portefeuille.
@@ -121,7 +121,7 @@ export function DocContent() {
         </p>
 
         <h2>7. Implémentation</h2>
-        <div className="overflow-x-auto rounded-apple border border-line-soft">
+        <div className="overflow-x-auto rounded-card border border-fifa-blue/20">
           <table className="table-pro">
             <thead>
               <tr>

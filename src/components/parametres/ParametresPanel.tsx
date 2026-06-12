@@ -92,11 +92,11 @@ export function ParametresPanel() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Global params */}
-        <section className="card-pro p-5">
-          <h2 className="mb-4 font-display text-lg font-semibold text-fifa-navy">
-            Paramètres globaux
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <section className="card-pro">
+          <div className="card-pro-header">
+            <h2>Paramètres globaux</h2>
+          </div>
+          <div className="grid gap-3 p-5 sm:grid-cols-2">
             {GLOBAL_FIELDS.map(({ key, label, step, hint }) => (
               <label key={key} className="block">
                 <span className="mb-1 block text-xs font-medium text-ink-secondary">
@@ -122,11 +122,11 @@ export function ParametresPanel() {
         </section>
 
         {/* Context adjustments */}
-        <section className="card-pro p-5">
-          <h2 className="mb-4 font-display text-lg font-semibold text-fifa-navy">
-            Ajustements contextuels (Elo)
-          </h2>
-          <div className="grid gap-3">
+        <section className="card-pro">
+          <div className="card-pro-header">
+            <h2>Ajustements contextuels</h2>
+          </div>
+          <div className="grid gap-3 p-5">
             {ADJ_FIELDS.map(({ key, label }) => (
               <label key={key} className="block">
                 <span className="mb-1 block text-xs font-medium text-ink-secondary">
@@ -151,12 +151,10 @@ export function ParametresPanel() {
 
       {/* Elo table */}
       <section className="card-pro mt-6 overflow-hidden">
-        <div className="border-b border-line-soft px-5 py-4">
-          <h2 className="font-display text-lg font-semibold text-fifa-navy">
-            Ratings Elo
-          </h2>
-          <p className="text-xs text-ink-tertiary">
-            Source : eloratings.net — à rafraîchir après chaque journée
+        <div className="card-pro-header">
+          <h2>Ratings Elo</h2>
+          <p className="mt-1 text-xs text-white/70">
+            eloratings.net — à rafraîchir après chaque journée
           </p>
         </div>
         <div className="max-h-80 overflow-auto">
@@ -195,12 +193,12 @@ export function ParametresPanel() {
       </section>
 
       {/* Match pricer */}
-      <section className="card-pro mt-6 p-5">
-        <h2 className="mb-4 font-display text-lg font-semibold text-fifa-navy">
-          Simulateur de pricing
-        </h2>
+      <section className="card-pro mt-6">
+        <div className="card-pro-header">
+          <h2>Simulateur de pricing</h2>
+        </div>
 
-        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-6 grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-4">
           <label>
             <span className="mb-1 block text-xs text-ink-secondary">
               Équipe A
@@ -307,7 +305,7 @@ export function ParametresPanel() {
           </label>
         </div>
 
-        <div className="overflow-x-auto rounded-apple border border-line-soft">
+        <div className="mx-5 overflow-x-auto rounded-card border border-fifa-blue/20">
           <table className="table-pro">
             <thead>
               <tr>
@@ -366,37 +364,45 @@ export function ParametresPanel() {
           </table>
         </div>
 
-        <div className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
-          <div className="rounded-apple bg-surface-muted px-4 py-3">
-            <p className="text-xs text-ink-tertiary">Intensités</p>
-            <p className="font-mono font-semibold">
+        <div className="mx-5 mb-5 grid gap-3 text-sm sm:grid-cols-3">
+          <div className="rounded-card border-2 border-fifa-blue/15 bg-fifa-blue/5 px-4 py-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-fifa-blue">
+              Intensités
+            </p>
+            <p className="font-mono font-semibold text-fifa-blue-dark">
               λₐ = {pricing.lambdaA.toFixed(2)} · λᵦ = {pricing.lambdaB.toFixed(2)}
             </p>
           </div>
-          <div className="rounded-apple bg-surface-muted px-4 py-3">
-            <p className="text-xs text-ink-tertiary">Score mode</p>
-            <p className="font-display text-lg font-bold">{pricing.modeScore}</p>
+          <div className="rounded-card border-2 border-dz-green/20 bg-dz-green/5 px-4 py-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-dz-green">
+              Score mode
+            </p>
+            <p className="font-display text-lg font-extrabold text-fifa-blue-dark">
+              {pricing.modeScore}
+            </p>
           </div>
-          <div className="rounded-apple bg-surface-muted px-4 py-3">
-            <p className="text-xs text-ink-tertiary">O/U 2.5 · BTTS</p>
-            <p className="font-mono font-semibold">
+          <div className="rounded-card border-2 border-dz-red/20 bg-dz-red/5 px-4 py-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-dz-red">
+              O/U 2.5 · BTTS
+            </p>
+            <p className="font-mono font-semibold text-fifa-blue-dark">
               {pct(pricing.over25)} · {pct(pricing.btts)}
             </p>
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-tertiary">
+        <div className="mx-5 mb-5">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-fifa-blue">
             Top scores
           </p>
           <div className="flex flex-wrap gap-2">
             {pricing.topScores.map(({ score, prob }) => (
               <span
                 key={score}
-                className="rounded-lg border border-line-soft bg-surface px-3 py-1 font-mono text-xs"
+                className="rounded-card border border-fifa-blue/20 bg-surface px-3 py-1 font-mono text-xs"
               >
                 {score}{" "}
-                <span className="text-fifa-gold">{pct(prob)}</span>
+                <span className="font-bold text-dz-green">{pct(prob)}</span>
               </span>
             ))}
           </div>

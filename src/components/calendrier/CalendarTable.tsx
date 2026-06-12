@@ -18,12 +18,11 @@ export function CalendarTable() {
         title="Calendrier"
         subtitle="Programme complet de la phase de poules — journée 1 à 7."
       >
-        <div className="rounded-apple border border-line-soft bg-surface px-4 py-2 text-sm">
-          <span className="text-ink-tertiary">Progression </span>
-          <span className="font-semibold text-fifa-navy">
+        <div className="stat-pill">
+          <p className="stat-pill-label">Progression</p>
+          <p className="stat-pill-value text-dz-green">
             {played}/{matches.length}
-          </span>
-          <span className="text-ink-tertiary"> matchs joués</span>
+          </p>
         </div>
       </PageHeader>
 
@@ -58,12 +57,13 @@ export function CalendarTable() {
                       {m.kickoff}
                     </td>
                     <td>
-                      <span className="rounded bg-fifa-navy/5 px-1.5 py-0.5 font-mono text-xs font-semibold text-fifa-navy">
-                        {m.group}
-                      </span>
+                      <span className="badge-group">{m.group}</span>
                     </td>
                     <td>
-                      <TeamCell team={m.home} />
+                      <TeamCell
+                        team={m.home}
+                        highlight={m.home === "Algérie"}
+                      />
                     </td>
                     <td className="text-center text-xs text-ink-tertiary">
                       vs

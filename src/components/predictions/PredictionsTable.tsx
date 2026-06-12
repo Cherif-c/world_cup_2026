@@ -35,7 +35,7 @@ export function PredictionsTable() {
               label: "Brier moy.",
               value:
                 stats.avgBrier !== null ? stats.avgBrier.toFixed(3) : "—",
-              accent: "text-fifa-gold",
+              accent: "text-fifa-blue",
             },
             { label: "Restants", value: stats.upcoming },
           ]}
@@ -82,12 +82,13 @@ export function PredictionsTable() {
                       </span>
                     </td>
                     <td>
-                      <span className="rounded bg-fifa-navy/5 px-1.5 py-0.5 font-mono text-xs font-semibold text-fifa-navy">
-                        {m.group}
-                      </span>
+                      <span className="badge-group">{m.group}</span>
                     </td>
                     <td>
-                      <TeamCell team={m.home} />
+                      <TeamCell
+                        team={m.home}
+                        highlight={m.home === "Algérie"}
+                      />
                     </td>
                     <td className="text-center text-xs text-ink-tertiary">
                       vs
@@ -98,16 +99,16 @@ export function PredictionsTable() {
                         highlight={m.away === "Algérie"}
                       />
                     </td>
-                    <td className="text-center font-mono text-xs">
+                    <td className="text-center font-mono text-xs font-semibold text-fifa-blue">
                       {m.pred[0]}%
                     </td>
                     <td className="text-center font-mono text-xs text-ink-secondary">
                       {m.pred[1]}%
                     </td>
-                    <td className="text-center font-mono text-xs">
+                    <td className="text-center font-mono text-xs font-semibold text-dz-red">
                       {m.pred[2]}%
                     </td>
-                    <td className="text-center font-display text-base font-bold text-ink">
+                    <td className="text-center font-display text-base font-extrabold text-fifa-blue-dark">
                       {m.predictedScore}
                     </td>
                     <td className="text-center font-display text-base font-bold">
@@ -120,7 +121,7 @@ export function PredictionsTable() {
                     <td>
                       <VerdictBadge verdict={verdict} />
                     </td>
-                    <td className="text-right font-mono text-xs text-fifa-gold">
+                    <td className="text-right font-mono text-xs font-semibold text-fifa-blue">
                       {brier !== null ? brier.toFixed(3) : "—"}
                     </td>
                   </tr>
@@ -138,7 +139,7 @@ export function PredictionsTable() {
             .map((m) => (
               <p
                 key={m.id}
-                className="rounded-apple border border-fifa-gold/20 bg-fifa-gold/5 px-4 py-2 text-xs text-ink-secondary"
+                className="callout-dz text-xs"
               >
                 <span className="font-semibold text-ink">
                   {m.home} vs {m.away} :

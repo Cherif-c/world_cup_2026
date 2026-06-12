@@ -6,13 +6,14 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, children }: PageHeaderProps) {
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight text-fifa-navy sm:text-4xl">
-          {title}
-        </h1>
+        <h1 className="page-title">{title}</h1>
+        <div className="page-title-accent" />
         {subtitle && (
-          <p className="mt-1 max-w-2xl text-sm text-ink-secondary">{subtitle}</p>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-secondary">
+            {subtitle}
+          </p>
         )}
       </div>
       {children}
