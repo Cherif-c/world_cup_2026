@@ -1,5 +1,5 @@
-import { PredictionsTable } from "@/components/predictions/PredictionsTable";
+import { PredictionsView } from "@/components/predictions/PredictionsView";
 
 export default function PredictionsPage() {
-  return <PredictionsTable />;
+  return <PredictionsView />;
 }

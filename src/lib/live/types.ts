@@ -19,7 +19,7 @@ export interface LiveMatchUpdate {
 
 export interface LiveApiResponse {
   updatedAt: string;
-  source: "espn" | "api-football" | "static";
+  source: "espn" | "static";
   configured: boolean;
   liveCount: number;
   matches: LiveMatchUpdate[];

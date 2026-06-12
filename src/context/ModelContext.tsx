@@ -23,12 +23,28 @@ interface ModelContextValue {
 
 const ModelContext = createContext<ModelContextValue | null>(null);
 
+function mergeConfig(stored: Partial<ModelConfig>, defaults: ModelConfig): ModelConfig {
+  return {
+    global: {
+      ...defaults.global,
+      ...stored.global,
+      muByMatchday: {
+        ...defaults.global.muByMatchday,
+        ...stored.global?.muByMatchday,
+      },
+    },
+    contextAdj: { ...defaults.contextAdj, ...stored.contextAdj },
+    elo: { ...defaults.elo, ...stored.elo },
+    strength: { ...defaults.strength, ...stored.strength },
+  };
+}
+
 function loadConfig(): ModelConfig {
   if (typeof window === "undefined") return DEFAULT_MODEL_CONFIG;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_MODEL_CONFIG;
-    return { ...DEFAULT_MODEL_CONFIG, ...JSON.parse(raw) };
+    return mergeConfig(JSON.parse(raw), DEFAULT_MODEL_CONFIG);
   } catch {
     return DEFAULT_MODEL_CONFIG;
   }

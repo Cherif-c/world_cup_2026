@@ -4,6 +4,7 @@ import type {
   ModelConfig,
   PricingResult,
 } from "./types";
+import { intensitesFromStrength, pickPredictedScore } from "./strength";
 
 function factorial(n: number): number {
   if (n <= 1) return 1;
@@ -28,26 +29,6 @@ function tauDixonColes(
   if (x === 1 && y === 0) return 1 + lb * rho;
   if (x === 1 && y === 1) return 1 - rho;
   return 1;
-}
-
-export function intensites(
-  eloA: number,
-  eloB: number,
-  adj: MatchAdjustments,
-  params: GlobalParams
-): [number, number] {
-  const d = eloA + adj.adjEloA - (eloB + adj.adjEloB);
-  const w = 1 / (1 + Math.pow(10, -d / 400));
-  const ratio = Math.pow(w / (1 - w), params.ratioExponent);
-  const lb = Math.max(
-    params.lambdaMin,
-    params.muTotal / (1 + ratio) + adj.bonusLambdaB
-  );
-  const la = Math.max(
-    params.lambdaMin,
-    (params.muTotal * ratio) / (1 + ratio) + adj.bonusLambdaA
-  );
-  return [la, lb];
 }
 
 export function scoreMatrix(
@@ -111,19 +92,32 @@ export function priceMatch(
     bonusLambdaA: 0,
     bonusLambdaB: 0,
   },
-  marketOdds?: [number, number, number]
+  marketOdds?: [number, number, number],
+  muTotal?: number
 ): PricingResult {
+  const params: GlobalParams = muTotal
+    ? { ...config.global, muTotal }
+    : config.global;
   const eloA = config.elo[teamA] ?? 1700;
   const eloB = config.elo[teamB] ?? 1700;
-  const [la, lb] = intensites(eloA, eloB, adj, config.global);
-  const matrix = scoreMatrix(la, lb, config.global);
+  const [la, lb] = intensitesFromStrength(
+    teamA,
+    teamB,
+    eloA,
+    eloB,
+    config.strength,
+    adj,
+    params,
+    params.muTotal
+  );
+  const matrix = scoreMatrix(la, lb, params);
   const pModel = outcomes1n2(matrix);
 
   let pFinal = pModel;
   let pMarket: [number, number, number] | undefined;
   if (marketOdds) {
     pMarket = devig(marketOdds);
-    pFinal = credibilite(pModel, pMarket, config.global.zCred);
+    pFinal = credibilite(pModel, pMarket, params.zCred);
   }
 
   const topScores = [...matrix.entries()]
@@ -140,6 +134,12 @@ export function priceMatch(
   }
 
   const modeScore = topScores[0]?.score ?? "0-0";
+  const predictedScore = pickPredictedScore(
+    matrix,
+    la,
+    lb,
+    params.maxGoals
+  );
 
   return {
     lambdaA: la,
@@ -155,5 +155,6 @@ export function priceMatch(
     over25,
     btts,
     modeScore,
+    predictedScore,
   };
 }

@@ -141,7 +141,7 @@ export function DocContent() {
                 </td>
               </tr>
               <tr>
-                <td className="font-mono text-xs">src/data/matches.ts</td>
+                <td className="font-mono text-xs">src/data/fixtures.ts</td>
                 <td className="text-sm">
                   Données matchs + saisie des résultats réels
                 </td>

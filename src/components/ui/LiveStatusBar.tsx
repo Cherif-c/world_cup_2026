@@ -42,9 +42,7 @@ export function LiveStatusBar() {
             Scores{" "}
             {data.source === "espn"
               ? "ESPN (gratuit · ~15s)"
-              : data.source === "api-football"
-                ? "API-Football"
-                : "statiques"}
+              : "statiques"}
           </span>
         )}
         <span className="text-ink-tertiary">

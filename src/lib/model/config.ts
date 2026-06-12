@@ -1,10 +1,12 @@
 import type { ModelConfig } from "./types";
+import { TEAM_STRENGTH } from "@/data/team-strength";
 
 export const DEFAULT_MODEL_CONFIG: ModelConfig = {
   global: {
-    muTotal: 2.45,
+    muTotal: 2.55,
+    muByMatchday: { 1: 2.35, 2: 2.55, 3: 2.7 },
     eloPerGd: 137,
-    rhoDc: -0.1,
+    rhoDc: -0.07,
     lambdaMin: 0.15,
     maxGoals: 8,
     zCred: 0.35,
@@ -54,7 +56,7 @@ export const DEFAULT_MODEL_CONFIG: ModelConfig = {
     Irak: 1650,
     Argentine: 2150,
     Autriche: 1860,
-    Algérie: 1790,
+    Algérie: 1845,
     Jordanie: 1645,
     Portugal: 2010,
     Colombie: 1950,
@@ -65,4 +67,5 @@ export const DEFAULT_MODEL_CONFIG: ModelConfig = {
     Panama: 1700,
     Ghana: 1705,
   },
+  strength: { ...TEAM_STRENGTH },
 };

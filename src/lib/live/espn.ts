@@ -1,5 +1,6 @@
-import { MATCH_DAYS, type FlatMatch } from "@/data/matches";
+import { FIXTURES } from "@/data/fixtures";
 import { teamsMatch } from "./team-api-names";
+import type { LiveMatchRef } from "./match-ref";
 import type { LiveMatchUpdate, MatchStatus } from "./types";
 
 const ESPN_SCOREBOARD =
@@ -45,8 +46,12 @@ export interface EspnFixture {
 }
 
 function espnDateRange(): string {
-  const days = [...new Set(MATCH_DAYS.map((d) => d.date.replace(/-/g, "")))].sort();
-  if (days.length === 0) return new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const days = [
+    ...new Set(FIXTURES.map((f) => f.date.replace(/-/g, ""))),
+  ].sort();
+  if (days.length === 0) {
+    return new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  }
   return `${days[0]}-${days[days.length - 1]}`;
 }
 
@@ -136,7 +141,7 @@ function datesCompatible(espnDate: string, ourDate: string): boolean {
 
 export function findEspnFixture(
   fixtures: EspnFixture[],
-  match: FlatMatch
+  match: LiveMatchRef
 ): EspnFixture | undefined {
   return (
     fixtures.find(
@@ -153,18 +158,18 @@ export function findEspnFixture(
 }
 
 export function espnToUpdate(
-  match: FlatMatch,
+  match: LiveMatchRef,
   fixture?: EspnFixture
 ): LiveMatchUpdate {
   if (!fixture) {
     return {
       matchId: match.id,
-      homeScore: match.result ? parseInt(match.result.split("-")[0]) : null,
-      awayScore: match.result ? parseInt(match.result.split("-")[1]) : null,
-      status: match.result ? "finished" : "scheduled",
-      statusLabel: match.result ? "Terminé" : "À venir",
+      homeScore: null,
+      awayScore: null,
+      status: "scheduled",
+      statusLabel: "À venir",
       minute: null,
-      scoreText: match.result,
+      scoreText: null,
       fixtureId: null,
     };
   }
@@ -183,7 +188,7 @@ export function espnToUpdate(
     minute: fixture.minute,
     scoreText: showScore
       ? `${fixture.homeScore}-${fixture.awayScore}`
-      : match.result,
+      : null,
     fixtureId: parseInt(fixture.eventId, 10) || null,
   };
 }

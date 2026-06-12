@@ -1,4 +1,4 @@
-import { VERDICT_LABELS, type Verdict } from "@/lib/scoring";
+import { VERDICT_1X2_LABELS, VERDICT_LABELS, type Verdict } from "@/lib/scoring";
 
 const STYLES: Record<Exclude<Verdict, null>, string> = {
   exact: "bg-dz-green text-white ring-dz-green",
@@ -6,7 +6,15 @@ const STYLES: Record<Exclude<Verdict, null>, string> = {
   rate: "bg-dz-red text-white ring-dz-red",
 };
 
-export function VerdictBadge({ verdict }: { verdict: Verdict }) {
+export function VerdictBadge({
+  verdict,
+  variant = "1x2",
+}: {
+  verdict: Verdict;
+  variant?: "score" | "1x2";
+}) {
+  const labels = variant === "1x2" ? VERDICT_1X2_LABELS : VERDICT_LABELS;
+
   if (!verdict) {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-card border border-fifa-blue/30 bg-fifa-blue/5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-fifa-blue">
@@ -19,7 +27,7 @@ export function VerdictBadge({ verdict }: { verdict: Verdict }) {
     <span
       className={`inline-flex rounded-card px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ring-1 ${STYLES[verdict]}`}
     >
-      {VERDICT_LABELS[verdict]}
+      {labels[verdict]}
     </span>
   );
 }

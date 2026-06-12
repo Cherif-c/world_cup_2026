@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useModelConfig } from "@/context/ModelContext";
-import { flattenMatches } from "@/data/matches";
+import { FIXTURES } from "@/data/fixtures";
 import { priceMatch } from "@/lib/model/engine";
 import type { ContextAdj, GlobalParams } from "@/lib/model/types";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -14,13 +14,19 @@ const GLOBAL_FIELDS: {
   step: number;
   hint?: string;
 }[] = [
-  { key: "muTotal", label: "μ — total buts attendu", step: 0.05 },
-  { key: "eloPerGd", label: "Pts Elo / but d'écart", step: 1 },
+  { key: "muTotal", label: "μ — total buts (défaut)", step: 0.05 },
+  { key: "eloPerGd", label: "Pts Elo / but d'écart", step: 1, hint: "K Elo dynamique ≈ 4000 / valeur" },
   { key: "rhoDc", label: "ρ Dixon-Coles", step: 0.01 },
   { key: "lambdaMin", label: "λ plancher", step: 0.05 },
-  { key: "zCred", label: "z crédibilité Bühlmann", step: 0.05, hint: "Poids modèle vs marché" },
+  { key: "zCred", label: "z crédibilité Bühlmann", step: 0.05, hint: "Poids modèle vs marché (J1)" },
   { key: "maxGoals", label: "Troncature matrice", step: 1 },
   { key: "ratioExponent", label: "Exposant ratio λ", step: 0.05 },
+];
+
+const MU_MATCHDAY: { md: 1 | 2 | 3; label: string }[] = [
+  { md: 1, label: "μ J1 (prudente)" },
+  { md: 2, label: "μ J2" },
+  { md: 3, label: "μ J3 (enjeu)" },
 ];
 
 const ADJ_FIELDS: {
@@ -35,7 +41,7 @@ const ADJ_FIELDS: {
 export function ParametresPanel() {
   const { config, updateGlobal, updateContextAdj, updateElo, resetConfig } =
     useModelConfig();
-  const matches = flattenMatches();
+  const matchCount = FIXTURES.length;
 
   const [teamA, setTeamA] = useState("Argentine");
   const [teamB, setTeamB] = useState("Algérie");
@@ -105,7 +111,7 @@ export function ParametresPanel() {
                 <input
                   type="number"
                   step={step}
-                  value={config.global[key]}
+                  value={config.global[key] as number}
                   onChange={(e) =>
                     updateGlobal({ [key]: parseFloat(e.target.value) || 0 })
                   }
@@ -116,6 +122,27 @@ export function ParametresPanel() {
                     {hint}
                   </span>
                 )}
+              </label>
+            ))}
+            {MU_MATCHDAY.map(({ md, label }) => (
+              <label key={md} className="block">
+                <span className="mb-1 block text-xs font-medium text-ink-secondary">
+                  {label}
+                </span>
+                <input
+                  type="number"
+                  step={0.05}
+                  value={config.global.muByMatchday[md]}
+                  onChange={(e) =>
+                    updateGlobal({
+                      muByMatchday: {
+                        ...config.global.muByMatchday,
+                        [md]: parseFloat(e.target.value) || 0,
+                      },
+                    })
+                  }
+                  className="input-pro font-mono"
+                />
               </label>
             ))}
           </div>
@@ -410,7 +437,7 @@ export function ParametresPanel() {
       </section>
 
       <p className="mt-4 text-xs text-ink-tertiary">
-        Matchs programmés : {matches.length} · Équipes : {teams.length}
+        Matchs programmés : {matchCount} · Équipes : {teams.length}
       </p>
     </>
   );

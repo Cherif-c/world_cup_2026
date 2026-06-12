@@ -6,7 +6,7 @@ import { FlagIcon } from "@/components/ui/FlagIcon";
 
 const NAV = [
   { href: "/predictions", label: "Prédictions" },
-  { href: "/calendrier", label: "Calendrier" },
+  { href: "/classement", label: "Classement" },
   { href: "/parametres", label: "Paramètres" },
   { href: "/doc", label: "Documentation" },
 ];
