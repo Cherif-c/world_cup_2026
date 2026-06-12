@@ -39,7 +39,12 @@ export function LiveStatusBar() {
           </span>
         ) : (
           <span className="font-semibold text-fifa-blue">
-            Scores {data.source === "api-football" ? "API-Football" : "statiques"}
+            Scores{" "}
+            {data.source === "espn"
+              ? "ESPN (gratuit · ~15s)"
+              : data.source === "api-football"
+                ? "API-Football"
+                : "statiques"}
           </span>
         )}
         <span className="text-ink-tertiary">

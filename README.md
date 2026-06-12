@@ -23,20 +23,19 @@ npm install
 npm run dev
 ```
 
-## Scores en direct (API-Football)
+## Scores en direct
 
-1. Créer un compte gratuit sur [api-football.com](https://www.api-football.com/)
-2. Copier la clé dans `.env.local` :
+**Source principale : ESPN** (gratuit, sans clé, toute la CDM 2026)
+- Rafraîchissement **toutes les 15 s** pendant un match live
+- Horloge en direct (`45'`, `90'+3'`, Mi-temps…)
+
+**Repli optionnel : API-Football** (clé dans `.env.local` / Vercel)
 
 ```env
-API_FOOTBALL_KEY=votre_cle
+API_FOOTBALL_KEY=votre_cle   # optionnel
 ```
 
-3. Sur **Vercel** : Settings → Environment Variables → `API_FOOTBALL_KEY`
-4. Les pages se rafraîchissent toutes les **60 s** (match en cours) ou **3 min** (sinon)
-5. Plan gratuit : pas d'accès `season=2026` — le site utilise `?date=` (compatible free tier, ~100 req/jour)
-
-Sans clé API, les scores statiques de `matches.ts` sont utilisés.
+> Google n'expose pas d'API sport publique gratuite. ESPN est la meilleure alternative sans clé.
 
 ## Saisir un résultat (fallback manuel)
 

@@ -40,9 +40,9 @@ export function LiveScoresProvider({ children }: { children: React.ReactNode }) 
   }, []);
 
   const pollIntervalMs = useMemo(() => {
-    if (!data) return 180_000;
-    if (data.liveCount > 0) return 60_000;
-    return 180_000;
+    if (!data) return 45_000;
+    if (data.liveCount > 0) return 15_000;
+    return 45_000;
   }, [data]);
 
   useEffect(() => {
