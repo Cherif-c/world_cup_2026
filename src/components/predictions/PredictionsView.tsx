@@ -25,24 +25,26 @@ export function PredictionsView() {
     <>
       <PageHeader
         title="Prédictions"
-        subtitle="Probabilités 1X2 et scores projetés pour les 72 matchs de poule."
+        subtitle="72 matchs de poule — probabilités 1X2 et scores projetés, recalculés en temps réel."
       >
         <StatPills
           stats={[
             {
               label: "Précision 1X2",
               value: stats.accuracy !== null ? `${stats.accuracy}%` : "—",
+              accent: "text-dz-green",
             },
             {
               label: "Scores exacts",
               value: stats.exact,
+              accent: "text-fifa-blue",
             },
             {
-              label: "Brier",
+              label: "Brier moy.",
               value:
                 stats.avgBrier !== null ? stats.avgBrier.toFixed(3) : "—",
             },
-            { label: "En direct", value: stats.live },
+            { label: "En direct", value: stats.live, accent: "text-dz-red" },
             { label: "Restants", value: stats.upcoming },
           ]}
         />
@@ -65,7 +67,7 @@ export function PredictionsView() {
         ))}
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {GROUP_IDS.map((group) => {
           const groupMatches = dayMatches.filter((m) => m.group === group);
           const hasAlgeria = groupMatches.some(
@@ -75,12 +77,23 @@ export function PredictionsView() {
           return (
             <section
               key={group}
-              className={`card-pro ${hasAlgeria ? "ring-1 ring-emerald-200" : ""}`}
+              className={`card-pro ${
+                hasAlgeria ? "ring-2 ring-dz-green/35 shadow-glow" : ""
+              }`}
             >
-              <div className="card-pro-header flex items-center justify-between">
+              <div
+                className={`card-pro-header flex items-center justify-between ${
+                  hasAlgeria ? "card-pro-header-algeria" : ""
+                }`}
+              >
                 <h2>Groupe {group}</h2>
+                {hasAlgeria && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-white/90">
+                    Algérie
+                  </span>
+                )}
               </div>
-              <div className="space-y-2 p-3">
+              <div className="space-y-2.5 bg-surface-muted/40 p-2.5">
                 {groupMatches.map((m) => (
                   <MatchCard key={m.id} match={m} />
                 ))}

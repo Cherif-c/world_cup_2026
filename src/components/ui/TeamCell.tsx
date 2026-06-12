@@ -17,12 +17,16 @@ export function TeamCell({
     >
       <FlagIcon
         team={team}
-        size={22}
-        className="rounded-sm ring-1 ring-line-soft"
+        size={24}
+        className={
+          highlight
+            ? "ring-2 ring-dz-red ring-offset-1"
+            : "ring-1 ring-fifa-blue/20"
+        }
       />
       <span
-        className={`truncate text-sm ${
-          highlight ? "font-medium text-emerald-800" : "font-medium text-ink"
+        className={`truncate text-xs font-bold leading-tight sm:text-sm ${
+          highlight ? "text-dz-green" : "text-ink"
         } ${align === "right" ? "text-right" : ""}`}
       >
         {team}

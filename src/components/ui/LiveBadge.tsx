@@ -20,7 +20,7 @@ export function LiveBadge({ status, label }: LiveBadgeProps) {
   return (
     <span className={STYLES[status]}>
       {status === "live" && (
-        <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
+        <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
       )}
       {label}
     </span>

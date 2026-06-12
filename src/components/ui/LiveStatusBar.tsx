@@ -4,8 +4,8 @@ import { useLiveScores } from "@/context/LiveScoresContext";
 
 function timeAgo(iso: string): string {
   const sec = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (sec < 60) return `${sec}s`;
-  return `${Math.floor(sec / 60)} min`;
+  if (sec < 60) return `il y a ${sec}s`;
+  return `il y a ${Math.floor(sec / 60)} min`;
 }
 
 export function LiveStatusBar() {
@@ -13,8 +13,8 @@ export function LiveStatusBar() {
 
   if (loading && !data) {
     return (
-      <div className="mb-6 rounded-card border border-line-soft bg-surface-muted px-4 py-2.5 text-sm text-ink-secondary">
-        Chargement des scores…
+      <div className="mb-4 rounded-card border border-fifa-blue/25 bg-fifa-blue/5 px-4 py-2.5 text-xs font-semibold text-fifa-blue">
+        Connexion aux scores en direct…
       </div>
     );
   }
@@ -24,26 +24,36 @@ export function LiveStatusBar() {
   const isLive = data.liveCount > 0;
 
   return (
-    <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-card border border-line-soft bg-surface px-4 py-2.5 text-sm">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-secondary">
+    <div
+      className={`mb-4 flex flex-wrap items-center justify-between gap-3 rounded-card border px-4 py-2.5 text-xs ${
+        isLive
+          ? "border-dz-red/40 bg-dz-red/5"
+          : "border-fifa-blue/25 bg-fifa-blue/5"
+      }`}
+    >
+      <div className="flex flex-wrap items-center gap-2">
         {isLive ? (
-          <span className="inline-flex items-center gap-1.5 font-medium text-red-600">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
-            {data.liveCount} en direct
+          <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-dz-red">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-dz-red" />
+            {data.liveCount} match{data.liveCount > 1 ? "s" : ""} en direct
           </span>
         ) : (
-          <span>
-            Source {data.source === "espn" ? "ESPN" : "statique"}
+          <span className="font-semibold text-fifa-blue">
+            Scores {data.source === "espn" ? "ESPN" : "statiques"} · ~15s
           </span>
         )}
         <span className="text-ink-tertiary">
-          MAJ {timeAgo(data.updatedAt)} · {pollIntervalMs / 1000}s
+          · MAJ {timeAgo(data.updatedAt)} · refresh {pollIntervalMs / 1000}s
         </span>
         {data.error && (
-          <span className="text-red-600">{data.error}</span>
+          <span className="font-semibold text-dz-red">· {data.error}</span>
         )}
       </div>
-      <button type="button" onClick={() => refresh()} className="btn-secondary">
+      <button
+        type="button"
+        onClick={() => refresh()}
+        className="rounded border border-fifa-blue/40 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-fifa-blue transition hover:bg-fifa-blue hover:text-white"
+      >
         Actualiser
       </button>
     </div>

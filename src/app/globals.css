@@ -11,10 +11,15 @@
 
   body {
     @apply bg-surface-page text-ink antialiased;
+    background-image:
+      radial-gradient(ellipse at 0% 0%, rgba(0, 98, 51, 0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(210, 16, 52, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 0%, rgba(0, 48, 135, 0.1) 0%, transparent 60%);
+    background-attachment: fixed;
   }
 
   ::selection {
-    @apply bg-fifa-blue/15 text-fifa-blue-dark;
+    @apply bg-dz-green/30 text-fifa-blue-dark;
   }
 }
 
@@ -24,67 +29,79 @@
   }
 
   .table-pro thead th {
-    @apply border-b border-line-soft bg-surface-muted px-4 py-3 text-left text-xs font-medium text-ink-secondary;
+    @apply sticky top-0 z-10 border-b-2 border-fifa-blue bg-fifa-blue px-4 py-3 text-left text-[11px] font-bold uppercase tracking-widest text-white;
   }
 
   .table-pro tbody td {
-    @apply border-b border-line-soft px-4 py-3 align-middle text-ink;
+    @apply border-b border-line-soft bg-surface-card px-4 py-3 align-middle text-ink;
   }
 
   .table-pro tbody tr:hover td {
-    @apply bg-surface-muted/60;
+    @apply bg-surface-muted;
   }
 
   .table-pro tbody tr.row-algeria td {
-    @apply bg-emerald-50/50;
+    @apply bg-dz-green/[0.07];
+  }
+
+  .table-pro tbody tr.row-algeria td:first-child {
+    box-shadow: inset 4px 0 0 #006233, inset 7px 0 0 #ffffff, inset 10px 0 0 #d21034;
   }
 
   .input-pro {
-    @apply w-full rounded-card border border-line-soft bg-surface px-3 py-2 text-sm text-ink outline-none transition placeholder:text-ink-tertiary;
+    @apply w-full rounded-card border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition;
   }
 
   .input-pro:focus {
-    @apply border-fifa-blue ring-2 ring-fifa-blue/10;
+    @apply border-fifa-blue ring-2 ring-fifa-blue/20;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-card bg-fifa-blue px-4 py-2 text-sm font-medium text-white transition hover:bg-fifa-blue-mid;
+    @apply inline-flex items-center justify-center rounded-card bg-dz-green px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-dz-green-bright;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-card border border-line bg-surface px-4 py-2 text-sm font-medium text-ink-secondary transition hover:border-line hover:bg-surface-muted hover:text-ink;
+    @apply inline-flex items-center justify-center rounded-card border-2 border-fifa-blue/40 bg-transparent px-4 py-2 text-sm font-semibold text-fifa-blue transition hover:bg-fifa-blue hover:text-white;
   }
 
   .card-pro {
-    @apply overflow-hidden rounded-card-lg border border-line-soft bg-surface-card shadow-card;
+    @apply overflow-hidden rounded-card-lg border border-fifa-blue/10 bg-surface-card shadow-card;
   }
 
   .card-pro-header {
-    @apply border-b border-line-soft bg-surface-muted px-4 py-3;
+    @apply border-b border-fifa-blue/20 bg-fifa-blue px-4 py-3;
   }
 
   .card-pro-header h2 {
-    @apply text-sm font-semibold text-ink;
+    @apply font-display text-sm font-bold uppercase tracking-wide text-white;
+  }
+
+  .card-pro-header-algeria {
+    @apply border-b border-dz-green/30 bg-dz-green;
   }
 
   .page-title {
-    @apply font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl;
+    @apply font-display text-3xl font-extrabold uppercase tracking-tight text-fifa-blue-dark sm:text-4xl;
+  }
+
+  .page-title-accent {
+    @apply mt-2 h-1 w-24 rounded-full bg-dz-stripe-h;
   }
 
   .page-subtitle {
-    @apply mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-secondary;
+    @apply mt-3 max-w-2xl text-sm leading-relaxed text-ink-secondary;
   }
 
   .doc-formula {
-    @apply my-4 overflow-x-auto rounded-card border border-line-soft bg-surface-muted px-5 py-4 text-sm text-ink;
+    @apply my-4 overflow-x-auto rounded-card border border-fifa-blue/20 bg-fifa-blue/[0.04] px-5 py-4 text-sm text-fifa-blue-dark;
   }
 
   .doc-section h2 {
-    @apply mb-3 mt-8 border-b border-line-soft pb-2 text-lg font-semibold text-ink;
+    @apply mb-3 mt-8 border-l-4 border-dz-green pl-4 font-display text-xl font-bold uppercase tracking-tight text-fifa-blue-dark;
   }
 
   .doc-section h3 {
-    @apply mb-2 mt-5 text-sm font-semibold text-ink;
+    @apply mb-2 mt-5 text-base font-bold text-fifa-blue;
   }
 
   .doc-section p {
@@ -96,63 +113,117 @@
   }
 
   .callout {
-    @apply rounded-card border border-line-soft bg-surface-muted px-4 py-3 text-sm text-ink-secondary;
+    @apply rounded-card border-l-4 border-dz-green bg-dz-green/[0.07] px-4 py-3 text-sm text-ink-secondary;
   }
 
   .stat-pill {
-    @apply rounded-card border border-line-soft bg-surface-card px-4 py-3 shadow-card;
+    @apply rounded-card border-2 border-fifa-blue/15 bg-surface-card px-4 py-2.5 shadow-sm;
   }
 
   .stat-pill-label {
-    @apply text-xs font-medium text-ink-tertiary;
+    @apply text-[10px] font-bold uppercase tracking-widest text-fifa-blue;
   }
 
   .stat-pill-value {
-    @apply mt-0.5 font-display text-lg font-semibold tabular-nums text-ink;
+    @apply font-display text-xl font-extrabold tabular-nums text-fifa-blue-dark;
   }
 
   .segmented {
-    @apply inline-flex rounded-card-lg border border-line-soft bg-surface-muted p-1;
+    @apply inline-flex rounded-card-lg border-2 border-fifa-blue/15 bg-surface-card p-1 shadow-sm;
   }
 
   .segmented-btn {
-    @apply rounded-card px-4 py-2 text-sm font-medium text-ink-secondary transition;
+    @apply rounded-card px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-fifa-blue transition;
   }
 
   .segmented-btn-active {
-    @apply bg-surface-card text-ink shadow-card;
+    @apply bg-fifa-blue text-white shadow-md;
   }
 
+  /* ── Match card ── */
   .match-card {
-    @apply rounded-card border border-line-soft bg-surface p-3 transition hover:shadow-card-hover;
+    @apply overflow-hidden rounded-card border border-line-soft bg-surface shadow-sm transition hover:border-fifa-blue/25 hover:shadow-glow;
   }
 
-  .match-card-highlight {
-    @apply border-emerald-200/80 bg-emerald-50/30;
+  .match-card-algeria {
+    @apply border-dz-green/35 bg-gradient-to-br from-dz-green/[0.06] to-surface;
+    box-shadow: inset 3px 0 0 #006233;
+  }
+
+  .match-card-meta {
+    @apply flex items-center justify-between gap-2 px-3 pt-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-tertiary;
+  }
+
+  .match-card-body {
+    @apply px-3 py-2;
+  }
+
+  .match-card-score {
+    @apply font-display text-xl font-extrabold tabular-nums text-fifa-blue-dark;
+  }
+
+  .match-card-pick {
+    @apply mt-1.5 text-center text-[11px] font-semibold text-dz-green;
+  }
+
+  .match-card-probs {
+    @apply mx-3 mb-2 grid grid-cols-3 gap-1.5;
+  }
+
+  .prob-cell {
+    @apply rounded px-1.5 py-1 text-center font-mono text-[10px] font-bold tabular-nums text-white;
+  }
+
+  .prob-cell-1 {
+    @apply bg-prob-1;
+  }
+
+  .prob-cell-n {
+    @apply bg-prob-n;
+  }
+
+  .prob-cell-2 {
+    @apply bg-prob-2;
+  }
+
+  .match-card-footer {
+    @apply border-t border-line-soft bg-surface-muted/80 px-3 py-2;
+  }
+
+  .match-card-result {
+    @apply flex min-h-[1.75rem] items-center justify-between gap-2;
+  }
+
+  .match-card-verdicts {
+    @apply mt-1.5 flex flex-wrap items-center justify-center gap-1;
   }
 
   .badge {
-    @apply inline-flex items-center rounded px-2 py-0.5 text-[11px] font-medium;
+    @apply inline-flex shrink-0 items-center justify-center rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide;
   }
 
   .badge-neutral {
-    @apply bg-surface-muted text-ink-secondary;
+    @apply border border-fifa-blue/25 bg-fifa-blue/5 text-fifa-blue;
   }
 
   .badge-success {
-    @apply bg-emerald-100 text-emerald-800;
+    @apply bg-dz-green text-white;
   }
 
   .badge-info {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-fifa-blue text-white;
   }
 
   .badge-error {
-    @apply bg-red-100 text-red-800;
+    @apply bg-dz-red text-white;
   }
 
   .badge-live {
-    @apply bg-red-100 text-red-700;
+    @apply bg-dz-red text-white;
+  }
+
+  .badge-exact {
+    @apply border border-dz-green/40 bg-dz-green/10 text-dz-green;
   }
 }
 

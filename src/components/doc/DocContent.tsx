@@ -32,8 +32,9 @@ export function DocContent() {
 
       <div className="card-pro p-6 sm:p-8">
         <p className="callout mb-6">
-          Le modèle combine une estimation structurelle (Elo → intensités
-          Poisson) avec une pondération de crédibilité contre le marché (Bühlmann).
+          <strong className="font-bold text-dz-green">Cadre actuariel.</strong>{" "}
+          Estimation structurelle (Elo → Poisson) pondérée par le marché
+          (Bühlmann).
         </p>
 
         <h2>1. Force des équipes → différentiel de buts</h2>

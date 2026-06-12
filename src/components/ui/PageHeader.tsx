@@ -9,6 +9,7 @@ export function PageHeader({ title, subtitle, children }: PageHeaderProps) {
     <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
       <div>
         <h1 className="page-title">{title}</h1>
+        <div className="page-title-accent" />
         {subtitle && <p className="page-subtitle">{subtitle}</p>}
       </div>
       {children}
