@@ -4,6 +4,9 @@ import type { LiveApiResponse, LiveMatchUpdate, MatchStatus } from "./types";
 
 const API_BASE = "https://v3.football.api-sports.io";
 const WC_LEAGUE_ID = 1;
+/** Fenêtre accessible plan gratuit (étendue par API-Football au fil du tournoi) */
+const FREE_DATE_MIN = "2026-06-11";
+const FREE_DATE_MAX = "2026-06-13";
 
 interface ApiFixture {
   fixture: {
@@ -122,13 +125,17 @@ function offsetDate(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Plan gratuit : ?date= uniquement (pas season=2026). Limite ~100 req/jour. */
+function inFreeWindow(date: string): boolean {
+  return date >= FREE_DATE_MIN && date <= FREE_DATE_MAX;
+}
+
+/** Plan gratuit : ?date= uniquement, fenêtre 11–13 juin (puis étendue par l'API). */
 function datesToFetch(liveMode: boolean): string[] {
   const today = todayUtc();
-  if (liveMode) {
-    return [offsetDate(today, -1), today];
-  }
-  return [...new Set(MATCH_DAYS.map((d) => d.date))].sort();
+  const candidates = liveMode
+    ? [offsetDate(today, -1), today, offsetDate(today, 1)]
+    : [...new Set(MATCH_DAYS.map((d) => d.date))];
+  return candidates.filter(inFreeWindow).sort();
 }
 
 async function fetchDate(
@@ -154,7 +161,9 @@ async function fetchDate(
 
   if (json.errors && Object.keys(json.errors).length > 0) {
     const err = JSON.stringify(json.errors);
-    if (!err.includes("rateLimit")) throw new Error(err);
+    if (err.includes("rateLimit")) throw new Error(err);
+    if (err.includes("date") || err.includes("plan")) return [];
+    throw new Error(err);
   }
 
   return (json.response ?? []).filter((f) => f.league?.id === WC_LEAGUE_ID);
@@ -215,12 +224,18 @@ export async function getLiveScores(): Promise<LiveApiResponse> {
       (u) => u.status === "live" || u.status === "halftime"
     ).length;
 
+    const apiMatched = updates.filter((u) => u.fixtureId !== null).length;
+
     const data: LiveApiResponse = {
       updatedAt: new Date().toISOString(),
       source: "api-football",
       configured: true,
       liveCount,
       matches: updates,
+      error:
+        apiMatched === 0 && fixtures.length === 0
+          ? `Aucun match CDM sur les dates ${FREE_DATE_MIN}→${FREE_DATE_MAX} (plan gratuit)`
+          : undefined,
     };
 
     cache = { data, expires: Date.now() + ttl };
