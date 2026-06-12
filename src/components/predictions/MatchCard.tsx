@@ -3,7 +3,6 @@
 import type { EnrichedMatch } from "@/lib/model/enrich";
 import {
   displayScore,
-  liveBrier,
   liveVerdict,
   liveVerdict1x2,
 } from "@/lib/model/enrich";
@@ -16,39 +15,34 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
   const live = match.live;
   const verdictScore = liveVerdict(match, live);
   const verdict1x2 = liveVerdict1x2(match, live);
-  const brier = liveBrier(match, live);
   const score = displayScore({ ...match, result: null }, live);
   const isLive =
     live?.status === "live" || live?.status === "halftime";
   const algeria = involvesAlgeria(match);
-  const hasMarket = !!match.pricing.pMarket;
 
   return (
-    <div
-      className={`rounded-card border px-3 py-2.5 ${
-        algeria
-          ? "border-dz-green/40 bg-dz-green/[0.04]"
-          : "border-line-soft bg-surface-card"
-      }`}
+    <article
+      className={`match-card ${algeria ? "match-card-highlight" : ""}`}
     >
-      <div className="mb-2 flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-wider text-ink-tertiary">
-        <span>
+      <div className="mb-3 flex items-center justify-between gap-2 text-xs text-ink-tertiary">
+        <time dateTime={match.date}>
           {formatDateFr(match.date)} · {match.kickoff}
-        </span>
-        <span className="truncate text-right">{match.venue}</span>
+        </time>
       </div>
 
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-3">
         <div className="min-w-0 flex-1">
           <TeamCell team={match.home} highlight={match.home === "Algérie"} />
         </div>
-        <div className="shrink-0 text-center">
-          <p className="font-display text-lg font-extrabold text-fifa-blue-dark">
+
+        <div className="shrink-0 px-2 text-center">
+          <p className="font-display text-xl font-semibold tabular-nums text-ink">
             {match.predictedScore}
           </p>
-          <p className="font-mono text-[10px] text-ink-tertiary">score mode</p>
+          <p className="mt-0.5 text-[10px] text-ink-tertiary">prédit</p>
         </div>
-        <div className="min-w-0 flex-1 text-right">
+
+        <div className="min-w-0 flex-1">
           <TeamCell
             team={match.away}
             highlight={match.away === "Algérie"}
@@ -57,41 +51,31 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
         </div>
       </div>
 
-      <p className="mt-1.5 text-center font-mono text-[10px] font-semibold text-dz-green">
+      <p className="mt-2 text-center text-xs text-ink-secondary">
         {match.pick1x2Label}
-        {hasMarket && (
-          <span className="ml-1 font-normal text-ink-tertiary">· marché</span>
-        )}
       </p>
 
-      <div className="mt-2 flex items-center justify-between gap-2 border-t border-line-soft pt-2">
-        <div className="flex gap-2 font-mono text-[11px]">
-          <span className="font-semibold text-fifa-blue">{match.pred[0]}%</span>
-          <span className="text-ink-secondary">{match.pred[1]}%</span>
-          <span className="font-semibold text-dz-red">{match.pred[2]}%</span>
+      <div className="mt-3 flex items-center justify-between gap-2 border-t border-line-soft pt-3">
+        <div className="flex gap-2.5 font-mono text-xs tabular-nums">
+          <span className="font-medium text-ink">{match.pred[0]}%</span>
+          <span className="text-ink-tertiary">{match.pred[1]}%</span>
+          <span className="font-medium text-ink">{match.pred[2]}%</span>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-1.5">
+        <div className="flex items-center gap-2">
           {score ? (
             <span
-              className={`font-display text-sm font-bold ${
-                isLive ? "text-dz-red" : "text-dz-green"
+              className={`font-display text-sm font-semibold tabular-nums ${
+                isLive ? "text-red-600" : "text-emerald-700"
               }`}
             >
               {score}
-              {live && (
-                <LiveBadge status={live.status} label={live.statusLabel} />
-              )}
             </span>
-          ) : (
-            <span className="text-xs text-ink-tertiary">—</span>
+          ) : null}
+          {live && (
+            <LiveBadge status={live.status} label={live.statusLabel} />
           )}
-          {verdict1x2 === "live" || verdict1x2 === "halftime" ? (
-            <LiveBadge
-              status={verdict1x2}
-              label={live?.statusLabel ?? "LIVE"}
-            />
-          ) : (
+          {verdict1x2 === "live" || verdict1x2 === "halftime" ? null : (
             <>
               <VerdictBadge verdict={verdict1x2} variant="1x2" />
               {verdictScore === "exact" && (
@@ -99,19 +83,8 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
               )}
             </>
           )}
-          {brier !== null && (
-            <span className="font-mono text-[10px] text-fifa-blue">
-              {brier.toFixed(3)}
-            </span>
-          )}
         </div>
       </div>
-
-      {match.revision && (
-        <p className="mt-2 text-[10px] leading-snug text-ink-secondary">
-          {match.revision}
-        </p>
-      )}
-    </div>
+    </article>
   );
 }

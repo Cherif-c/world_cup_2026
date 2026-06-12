@@ -25,30 +25,24 @@ export function PredictionsView() {
     <>
       <PageHeader
         title="Prédictions"
-        subtitle="72 matchs de poule — probabilités recalculées en temps réel depuis le modèle Poisson-Elo. Scores via ESPN."
+        subtitle="Probabilités 1X2 et scores projetés pour les 72 matchs de poule."
       >
         <StatPills
           stats={[
             {
-              label: "1X2 OK / Raté",
-              value: `${stats.pick1x2Ok} / ${stats.pick1x2Rate}`,
-            },
-            {
               label: "Précision 1X2",
               value: stats.accuracy !== null ? `${stats.accuracy}%` : "—",
-              accent: "text-dz-green",
             },
             {
-              label: "Score exact",
+              label: "Scores exacts",
               value: stats.exact,
-              accent: "text-fifa-blue",
             },
             {
-              label: "Brier moy.",
+              label: "Brier",
               value:
                 stats.avgBrier !== null ? stats.avgBrier.toFixed(3) : "—",
             },
-            { label: "En direct", value: stats.live, accent: "text-dz-red" },
+            { label: "En direct", value: stats.live },
             { label: "Restants", value: stats.upcoming },
           ]}
         />
@@ -56,16 +50,14 @@ export function PredictionsView() {
 
       <LiveStatusBar />
 
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="segmented mb-8">
         {MATCHDAYS.map((md) => (
           <button
             key={md.id}
             type="button"
             onClick={() => setMatchday(md.id)}
-            className={`rounded-card px-5 py-2.5 text-sm font-bold uppercase tracking-wide transition ${
-              matchday === md.id
-                ? "bg-fifa-blue text-white shadow-md"
-                : "border border-line-soft bg-surface-card text-fifa-blue hover:bg-fifa-blue/5"
+            className={`segmented-btn ${
+              matchday === md.id ? "segmented-btn-active" : ""
             }`}
           >
             {md.label}
@@ -73,7 +65,7 @@ export function PredictionsView() {
         ))}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {GROUP_IDS.map((group) => {
           const groupMatches = dayMatches.filter((m) => m.group === group);
           const hasAlgeria = groupMatches.some(
@@ -83,18 +75,12 @@ export function PredictionsView() {
           return (
             <section
               key={group}
-              className={`card-pro ${
-                hasAlgeria ? "ring-2 ring-dz-green/30" : ""
-              }`}
+              className={`card-pro ${hasAlgeria ? "ring-1 ring-emerald-200" : ""}`}
             >
-              <div
-                className={`card-pro-header ${
-                  hasAlgeria ? "bg-dz-green" : ""
-                }`}
-              >
+              <div className="card-pro-header flex items-center justify-between">
                 <h2>Groupe {group}</h2>
               </div>
-              <div className="space-y-3 p-3">
+              <div className="space-y-2 p-3">
                 {groupMatches.map((m) => (
                   <MatchCard key={m.id} match={m} />
                 ))}

@@ -27,15 +27,13 @@ export function DocContent() {
     <article className="doc-section">
       <PageHeader
         title="Documentation"
-        subtitle="Spécification complète du moteur de pricing — Poisson bivarié à intensités Elo, Dixon-Coles, crédibilité Bühlmann."
+        subtitle="Spécification du moteur Poisson-Elo, Dixon-Coles et crédibilité Bühlmann."
       />
 
       <div className="card-pro p-6 sm:p-8">
-        <p className="callout-dz mb-6">
-          <strong className="font-bold text-dz-green">Cadre actuariel.</strong> Le modèle
-          combine une estimation structurelle (Elo → intensités Poisson) avec une
-          pondération de crédibilité contre le marché — exactement la logique
-          Bühlmann : expérience propre vs expérience du portefeuille.
+        <p className="callout mb-6">
+          Le modèle combine une estimation structurelle (Elo → intensités
+          Poisson) avec une pondération de crédibilité contre le marché (Bühlmann).
         </p>
 
         <h2>1. Force des équipes → différentiel de buts</h2>
@@ -151,8 +149,7 @@ export function DocContent() {
         </div>
 
         <p className="mt-6 text-xs text-ink-tertiary">
-          Auteur du cadre : Karim × Claude, juin 2026. Ratings Elo à rafraîchir
-          après chaque journée (~10–25 pts par match CDM).
+          Ratings Elo à rafraîchir après chaque journée (~10–25 pts par match).
         </p>
       </div>
     </article>

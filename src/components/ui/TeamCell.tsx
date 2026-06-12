@@ -13,23 +13,17 @@ export function TeamCell({
 }: TeamCellProps) {
   return (
     <div
-      className={`flex items-center gap-2.5 ${align === "right" ? "flex-row-reverse text-right" : ""}`}
+      className={`flex items-center gap-2 ${align === "right" ? "flex-row-reverse" : ""}`}
     >
       <FlagIcon
         team={team}
-        size={26}
-        className={
-          highlight
-            ? "ring-2 ring-dz-red ring-offset-1"
-            : "ring-1 ring-fifa-blue/20"
-        }
+        size={22}
+        className="rounded-sm ring-1 ring-line-soft"
       />
       <span
-        className={`truncate text-sm font-semibold ${
-          highlight
-            ? "font-bold text-dz-green"
-            : "text-ink"
-        }`}
+        className={`truncate text-sm ${
+          highlight ? "font-medium text-emerald-800" : "font-medium text-ink"
+        } ${align === "right" ? "text-right" : ""}`}
       >
         {team}
       </span>

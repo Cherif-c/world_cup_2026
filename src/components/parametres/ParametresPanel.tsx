@@ -89,7 +89,7 @@ export function ParametresPanel() {
     <>
       <PageHeader
         title="Paramètres du modèle"
-        subtitle="Réglages globaux, ratings Elo et simulateur de pricing en temps réel. Sauvegarde automatique (localStorage)."
+        subtitle="Réglages du modèle, ratings Elo et simulateur de pricing."
       >
         <button type="button" onClick={resetConfig} className="btn-secondary">
           Réinitialiser
@@ -332,7 +332,7 @@ export function ParametresPanel() {
           </label>
         </div>
 
-        <div className="mx-5 overflow-x-auto rounded-card border border-fifa-blue/20">
+        <div className="mx-5 overflow-x-auto rounded-card border border-line-soft">
           <table className="table-pro">
             <thead>
               <tr>
@@ -363,15 +363,15 @@ export function ParametresPanel() {
                   </td>
                 </tr>
               )}
-              <tr className="bg-dz-green/5">
-                <td className="font-semibold">P final (z={config.global.zCred})</td>
-                <td className="text-center font-mono font-semibold text-dz-green">
+              <tr className="bg-surface-muted">
+                <td className="font-medium">P final (z={config.global.zCred})</td>
+                <td className="text-center font-mono font-medium">
                   {pct(pricing.pFinal[0])}
                 </td>
-                <td className="text-center font-mono font-semibold text-dz-green">
+                <td className="text-center font-mono font-medium">
                   {pct(pricing.pFinal[1])}
                 </td>
-                <td className="text-center font-mono font-semibold text-dz-green">
+                <td className="text-center font-mono font-medium">
                   {pct(pricing.pFinal[2])}
                 </td>
               </tr>
@@ -392,44 +392,36 @@ export function ParametresPanel() {
         </div>
 
         <div className="mx-5 mb-5 grid gap-3 text-sm sm:grid-cols-3">
-          <div className="rounded-card border-2 border-fifa-blue/15 bg-fifa-blue/5 px-4 py-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-fifa-blue">
-              Intensités
-            </p>
-            <p className="font-mono font-semibold text-fifa-blue-dark">
-              λₐ = {pricing.lambdaA.toFixed(2)} · λᵦ = {pricing.lambdaB.toFixed(2)}
+          <div className="stat-pill">
+            <p className="stat-pill-label">Intensités λ</p>
+            <p className="stat-pill-value font-mono text-base">
+              {pricing.lambdaA.toFixed(2)} · {pricing.lambdaB.toFixed(2)}
             </p>
           </div>
-          <div className="rounded-card border-2 border-dz-green/20 bg-dz-green/5 px-4 py-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-dz-green">
-              Score mode
-            </p>
-            <p className="font-display text-lg font-extrabold text-fifa-blue-dark">
-              {pricing.modeScore}
-            </p>
+          <div className="stat-pill">
+            <p className="stat-pill-label">Score prédit</p>
+            <p className="stat-pill-value">{pricing.predictedScore}</p>
           </div>
-          <div className="rounded-card border-2 border-dz-red/20 bg-dz-red/5 px-4 py-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-dz-red">
-              O/U 2.5 · BTTS
-            </p>
-            <p className="font-mono font-semibold text-fifa-blue-dark">
+          <div className="stat-pill">
+            <p className="stat-pill-label">O/U 2.5 · BTTS</p>
+            <p className="stat-pill-value font-mono text-base">
               {pct(pricing.over25)} · {pct(pricing.btts)}
             </p>
           </div>
         </div>
 
         <div className="mx-5 mb-5">
-          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-fifa-blue">
-            Top scores
+          <p className="mb-2 text-xs font-medium text-ink-tertiary">
+            Scores les plus probables
           </p>
           <div className="flex flex-wrap gap-2">
             {pricing.topScores.map(({ score, prob }) => (
               <span
                 key={score}
-                className="rounded-card border border-fifa-blue/20 bg-surface px-3 py-1 font-mono text-xs"
+                className="rounded-card border border-line-soft bg-surface-muted px-3 py-1 font-mono text-xs"
               >
                 {score}{" "}
-                <span className="font-bold text-dz-green">{pct(prob)}</span>
+                <span className="font-medium text-ink">{pct(prob)}</span>
               </span>
             ))}
           </div>

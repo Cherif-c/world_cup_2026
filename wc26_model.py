@@ -11,7 +11,6 @@ Usage rapide :
     python wc26_model.py "Coree du Sud" "Tchequie"
     python wc26_model.py "Argentine" "Algerie" --marche 1.55 4.20 6.50
 
-Auteur du cadre : Karim x Claude, juin 2026.
 """
 
 import math

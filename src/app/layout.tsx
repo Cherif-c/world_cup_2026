@@ -19,7 +19,7 @@ const interDisplay = Inter({
 export const metadata: Metadata = {
   title: "CDM 2026 — Pricing Engine",
   description:
-    "Prédictions, classement et modèle Poisson-Elo pour la Coupe du Monde FIFA 2026.",
+    "Prédictions, classements et modèle statistique pour la Coupe du Monde 2026.",
 };
 
 export default function RootLayout({
