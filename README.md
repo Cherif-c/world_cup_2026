@@ -1,40 +1,44 @@
-# Coupe du Monde 2026 — Prédictions
+# CDM 2026 — Pricing Engine
 
-Dashboard Next.js des prédictions vs résultats réels, avec drapeaux, calendrier par journée et score Brier.
+Dashboard Next.js professionnel : prédictions tabulaires, calendrier, paramétrage du modèle et documentation mathématique.
+
+## Pages
+
+| Route | Contenu |
+|---|---|
+| `/predictions` | Tableau prédictions vs résultats (1X2, Brier, verdicts) |
+| `/calendrier` | Programme complet phase de poules |
+| `/parametres` | Réglages modèle, Elo, simulateur de pricing live |
+| `/doc` | Spécification Poisson-Elo · Dixon-Coles · Bühlmann |
 
 ## Stack
 
-- **Next.js 15** + TypeScript + Tailwind CSS
-- **Modèle Python** (`wc26_model.py`) — Poisson bivarié Elo, Dixon-Coles, crédibilité marché
+- Next.js 15 · TypeScript · Tailwind CSS · KaTeX
+- Moteur TypeScript (`src/lib/model/`) + CLI Python (`wc26_model.py`)
 
-## Développement local
+## Développement
 
 ```powershell
-cd C:\Users\cherif.PERSONAL-PC\OneDrive\mcp_work\world_cup_2026
 npm install
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
-
 ## Saisir un résultat
 
-Éditer `src/data/matches.ts` : remplacer `result: null` par `result: "2-1"` (score équipe domicile — extérieur). Rebuild / redéployer.
+`src/data/matches.ts` → `result: "2-1"` puis `git push` (Vercel redéploie).
 
 ## Modèle Python
 
 ```powershell
-python wc26_model.py "Argentine" "Algerie"
+python wc26_model.py "Argentine" "Algerie" --bonus-b 0.25
 python wc26_model.py "France" "Senegal" --marche 1.70 3.80 5.20
 ```
 
 ## Déploiement
 
 ```powershell
-git add .
-git commit -m "Resultats du 13 juin"
-git push
+git add . ; git commit -m "message" ; git push
 vercel --prod
 ```
 
-Site : [world-cup-2026](https://github.com/Cherif-c/world_cup_2026)
+Site : [worldcup2026-gamma-mocha.vercel.app](https://worldcup2026-gamma-mocha.vercel.app)

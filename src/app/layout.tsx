@@ -1,34 +1,24 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
+import { AppShell } from "@/components/layout/AppShell";
+import { ModelProvider } from "@/context/ModelContext";
 import "./globals.css";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const outfitSans = Outfit({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["400", "500"],
 });
 
-const jetbrains = JetBrains_Mono({
+const interDisplay = Inter({
   subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500"],
+  variable: "--font-display",
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "CDM 2026 — Prédictions vs Résultats",
+  title: "CDM 2026 — Pricing Engine",
   description:
-    "Calendrier des matchs, prédictions du modèle Poisson-Elo et comparaison aux scores réels — Coupe du Monde FIFA 2026.",
-  openGraph: {
-    title: "CDM 2026 — Prédictions",
-    description: "Suivi des prédictions Coupe du Monde 2026",
-    type: "website",
-  },
+    "Prédictions, calendrier et modèle Poisson-Elo pour la Coupe du Monde FIFA 2026.",
 };
 
 export default function RootLayout({
@@ -39,9 +29,13 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${outfit.variable} ${outfitSans.variable} ${jetbrains.variable}`}
+      className={`${inter.variable} ${interDisplay.variable}`}
     >
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <ModelProvider>
+          <AppShell>{children}</AppShell>
+        </ModelProvider>
+      </body>
     </html>
   );
 }

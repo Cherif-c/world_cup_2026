@@ -5,47 +5,46 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        display: ["var(--font-display)", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       colors: {
-        pitch: {
-          950: "#050a08",
-          900: "#0a1410",
-          800: "#122018",
-          700: "#1a2e24",
+        surface: {
+          DEFAULT: "#ffffff",
+          muted: "#f5f5f7",
+          elevated: "#fafafa",
         },
-        gold: {
-          400: "#f5c842",
-          500: "#e8b020",
-          600: "#c9920a",
+        ink: {
+          DEFAULT: "#1d1d1f",
+          secondary: "#6e6e73",
+          tertiary: "#86868b",
         },
-        turf: {
-          400: "#3dd68c",
-          500: "#22c55e",
-          600: "#16a34a",
+        fifa: {
+          navy: "#0b1f3a",
+          deep: "#152a4a",
+          gold: "#c9a227",
+          "gold-light": "#e8c547",
+        },
+        dz: {
+          green: "#006233",
+          "green-light": "#00874a",
+          red: "#d21034",
+          white: "#ffffff",
+        },
+        line: {
+          DEFAULT: "#d2d2d7",
+          soft: "#e8e8ed",
         },
       },
-      backgroundImage: {
-        "hero-glow":
-          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,197,94,0.25), transparent)",
-        "card-shine":
-          "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)",
+      boxShadow: {
+        apple: "0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)",
+        "apple-lg": "0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
+        table: "0 1px 0 rgba(0,0,0,0.04)",
       },
-      animation: {
-        "fade-up": "fadeUp 0.5s ease-out forwards",
-        "pulse-soft": "pulseSoft 3s ease-in-out infinite",
-      },
-      keyframes: {
-        fadeUp: {
-          "0%": { opacity: "0", transform: "translateY(12px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        pulseSoft: {
-          "0%, 100%": { opacity: "0.6" },
-          "50%": { opacity: "1" },
-        },
+      borderRadius: {
+        apple: "12px",
+        "apple-lg": "18px",
       },
     },
   },

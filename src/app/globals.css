@@ -5,24 +5,84 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-pitch-950 text-white antialiased;
+    @apply bg-surface-muted text-ink antialiased;
   }
 
   ::selection {
-    @apply bg-turf-500/40 text-white;
+    @apply bg-dz-green/20 text-ink;
   }
 }
 
-/* Subtle pitch texture */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: 0.4;
+@layer components {
+  .table-pro {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .table-pro thead th {
+    @apply sticky top-0 z-10 border-b border-line bg-surface-muted/95 px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-ink-secondary backdrop-blur-sm;
+  }
+
+  .table-pro tbody td {
+    @apply border-b border-line-soft px-4 py-3 align-middle;
+  }
+
+  .table-pro tbody tr:hover td {
+    @apply bg-surface-elevated;
+  }
+
+  .table-pro tbody tr.row-algeria td {
+    @apply bg-dz-green/[0.04];
+  }
+
+  .table-pro tbody tr.row-algeria:hover td {
+    @apply bg-dz-green/[0.08];
+  }
+
+  .input-pro {
+    @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition focus:border-dz-green focus:ring-2 focus:ring-dz-green/20;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-dz-green px-4 py-2 text-sm font-medium text-white transition hover:bg-dz-green-light active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:bg-surface-elevated active:scale-[0.98];
+  }
+
+  .card-pro {
+    @apply rounded-apple-lg border border-line-soft bg-surface shadow-apple;
+  }
+
+  .doc-formula {
+    @apply my-4 overflow-x-auto rounded-apple border border-line-soft bg-surface-muted px-5 py-4 font-mono text-sm text-ink;
+  }
+
+  .doc-section h2 {
+    @apply mb-3 mt-8 font-display text-xl font-semibold text-fifa-navy;
+  }
+
+  .doc-section h3 {
+    @apply mb-2 mt-5 text-base font-semibold text-ink;
+  }
+
+  .doc-section p {
+    @apply mb-3 leading-relaxed text-ink-secondary;
+  }
+
+  .doc-section ul {
+    @apply mb-4 list-disc space-y-1 pl-5 text-ink-secondary;
+  }
+}
+
+/* KaTeX overrides */
+.katex-display {
+  margin: 1rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
