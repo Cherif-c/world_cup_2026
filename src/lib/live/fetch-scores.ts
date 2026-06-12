@@ -1,10 +1,9 @@
-import { flattenMatches, type FlatMatch } from "@/data/matches";
+import { flattenMatches, MATCH_DAYS, type FlatMatch } from "@/data/matches";
 import { teamsMatch } from "./team-api-names";
 import type { LiveApiResponse, LiveMatchUpdate, MatchStatus } from "./types";
 
 const API_BASE = "https://v3.football.api-sports.io";
-const WC_LEAGUE = 1;
-const WC_SEASON = 2026;
+const WC_LEAGUE_ID = 1;
 
 interface ApiFixture {
   fixture: {
@@ -12,6 +11,7 @@ interface ApiFixture {
     date: string;
     status: { short: string; long: string; elapsed: number | null };
   };
+  league: { id: number; name: string; season: number };
   goals: { home: number | null; away: number | null };
   teams: {
     home: { name: string };
@@ -45,19 +45,34 @@ function statusLabel(short: string, elapsed: number | null): string {
   return short;
 }
 
-function sameDate(apiDate: string, ourDate: string): boolean {
-  return apiDate.slice(0, 10) === ourDate;
+/** Tolérance fuseaux : coup d'envoi 20h Mexico peut tomber J+1 en UTC */
+function datesCompatible(apiDate: string, ourDate: string): boolean {
+  const api = new Date(apiDate.slice(0, 10) + "T12:00:00Z").getTime();
+  const ours = new Date(ourDate + "T12:00:00Z").getTime();
+  return Math.abs(api - ours) <= 36 * 60 * 60 * 1000;
+}
+
+function teamsPairMatch(
+  match: FlatMatch,
+  fixture: ApiFixture
+): boolean {
+  return (
+    teamsMatch(match.home, fixture.teams.home.name) &&
+    teamsMatch(match.away, fixture.teams.away.name)
+  );
 }
 
 function findApiFixture(
   fixtures: ApiFixture[],
   match: FlatMatch
 ): ApiFixture | undefined {
-  return fixtures.find(
-    (f) =>
-      sameDate(f.fixture.date, match.date) &&
-      teamsMatch(match.home, f.teams.home.name) &&
-      teamsMatch(match.away, f.teams.away.name)
+  const wc = fixtures.filter((f) => f.league?.id === WC_LEAGUE_ID);
+
+  return (
+    wc.find(
+      (f) => datesCompatible(f.fixture.date, match.date) && teamsPairMatch(match, f)
+    ) ??
+    wc.find((f) => teamsPairMatch(match, f))
   );
 }
 
@@ -79,7 +94,6 @@ function toUpdate(match: FlatMatch, fixture?: ApiFixture): LiveMatchUpdate {
   const status = mapStatus(short);
   const home = fixture.goals.home;
   const away = fixture.goals.away;
-
   const hasScore = home !== null && away !== null;
   const scoreText = hasScore ? `${home}-${away}` : null;
 
@@ -98,19 +112,35 @@ function toUpdate(match: FlatMatch, fixture?: ApiFixture): LiveMatchUpdate {
   };
 }
 
-async function fetchFixtures(apiKey: string): Promise<ApiFixture[]> {
-  const from = "2026-06-11";
-  const to = "2026-07-19";
+function todayUtc(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
+function offsetDate(isoDate: string, days: number): string {
+  const d = new Date(isoDate + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Plan gratuit : ?date= uniquement (pas season=2026). Limite ~100 req/jour. */
+function datesToFetch(liveMode: boolean): string[] {
+  const today = todayUtc();
+  if (liveMode) {
+    return [offsetDate(today, -1), today];
+  }
+  return [...new Set(MATCH_DAYS.map((d) => d.date))].sort();
+}
+
+async function fetchDate(
+  apiKey: string,
+  date: string
+): Promise<ApiFixture[]> {
   const url = new URL(`${API_BASE}/fixtures`);
-  url.searchParams.set("league", String(WC_LEAGUE));
-  url.searchParams.set("season", String(WC_SEASON));
-  url.searchParams.set("from", from);
-  url.searchParams.set("to", to);
+  url.searchParams.set("date", date);
 
   const res = await fetch(url.toString(), {
     headers: { "x-apisports-key": apiKey },
-    next: { revalidate: 0 },
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -123,13 +153,34 @@ async function fetchFixtures(apiKey: string): Promise<ApiFixture[]> {
   };
 
   if (json.errors && Object.keys(json.errors).length > 0) {
-    throw new Error(JSON.stringify(json.errors));
+    const err = JSON.stringify(json.errors);
+    if (!err.includes("rateLimit")) throw new Error(err);
   }
 
-  return json.response ?? [];
+  return (json.response ?? []).filter((f) => f.league?.id === WC_LEAGUE_ID);
 }
 
-function staticFallback(): LiveApiResponse {
+async function fetchAllWorldCupFixtures(
+  apiKey: string,
+  liveMode: boolean
+): Promise<ApiFixture[]> {
+  const dates = datesToFetch(liveMode);
+  const batches = await Promise.all(dates.map((d) => fetchDate(apiKey, d)));
+
+  const seen = new Set<number>();
+  const out: ApiFixture[] = [];
+  for (const batch of batches) {
+    for (const f of batch) {
+      if (!seen.has(f.fixture.id)) {
+        seen.add(f.fixture.id);
+        out.push(f);
+      }
+    }
+  }
+  return out;
+}
+
+function staticFallback(message?: string): LiveApiResponse {
   const matches = flattenMatches().map((m) => toUpdate(m));
   return {
     updatedAt: new Date().toISOString(),
@@ -137,7 +188,7 @@ function staticFallback(): LiveApiResponse {
     configured: false,
     liveCount: 0,
     matches,
-    error: "Clé API absente — ajoutez API_FOOTBALL_KEY dans .env.local",
+    error: message ?? "Clé API absente — ajoutez API_FOOTBALL_KEY dans .env.local",
   };
 }
 
@@ -148,15 +199,15 @@ export async function getLiveScores(): Promise<LiveApiResponse> {
     return staticFallback();
   }
 
-  const hasLive = cache?.data.liveCount && cache.data.liveCount > 0;
-  const ttl = hasLive ? 30_000 : 120_000;
+  const hasLive = (cache?.data.liveCount ?? 0) > 0;
+  const ttl = hasLive ? 60_000 : 2 * 60 * 60_000;
 
   if (cache && Date.now() < cache.expires) {
     return cache.data;
   }
 
   try {
-    const fixtures = await fetchFixtures(apiKey);
+    const fixtures = await fetchAllWorldCupFixtures(apiKey, hasLive);
     const ourMatches = flattenMatches();
 
     const updates = ourMatches.map((m) => toUpdate(m, findApiFixture(fixtures, m)));

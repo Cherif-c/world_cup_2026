@@ -33,7 +33,8 @@ API_FOOTBALL_KEY=votre_cle
 ```
 
 3. Sur **Vercel** : Settings → Environment Variables → `API_FOOTBALL_KEY`
-4. Les pages Prédictions et Calendrier se rafraîchissent toutes les **30 s** (match en cours) ou **2 min** (sinon)
+4. Les pages se rafraîchissent toutes les **60 s** (match en cours) ou **3 min** (sinon)
+5. Plan gratuit : pas d'accès `season=2026` — le site utilise `?date=` (compatible free tier, ~100 req/jour)
 
 Sans clé API, les scores statiques de `matches.ts` sont utilisés.
 
