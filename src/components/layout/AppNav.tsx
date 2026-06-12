@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { FlagIcon } from "@/components/ui/FlagIcon";
 import { usePathname } from "next/navigation";
 
 const NAV = [
@@ -18,14 +18,8 @@ export function AppNav() {
     <header className="sticky top-0 z-50 border-b border-line-soft bg-surface/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/predictions" className="flex shrink-0 items-center gap-3">
-          <div className="relative h-9 w-9 overflow-hidden rounded-full ring-2 ring-fifa-gold/40">
-            <Image
-              src="https://flagcdn.com/w80/dz.png"
-              alt="Algérie"
-              fill
-              className="object-cover"
-              sizes="36px"
-            />
+          <div className="overflow-hidden rounded-full ring-2 ring-fifa-gold/40">
+            <FlagIcon team="Algérie" size={36} className="rounded-full" />
           </div>
           <div className="hidden sm:block">
             <p className="font-display text-sm font-bold tracking-tight text-fifa-navy">

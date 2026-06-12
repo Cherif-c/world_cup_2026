@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { getFlagUrl } from "@/lib/teams";
+import { FlagIcon } from "./FlagIcon";
 
 interface TeamCellProps {
   team: string;
@@ -16,15 +15,7 @@ export function TeamCell({
     <div
       className={`flex items-center gap-2 ${align === "right" ? "flex-row-reverse text-right" : ""}`}
     >
-      <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full ring-1 ring-line-soft">
-        <Image
-          src={getFlagUrl(team, 48)}
-          alt={team}
-          fill
-          className="object-cover"
-          sizes="24px"
-        />
-      </div>
+      <FlagIcon team={team} size={24} />
       <span
         className={`truncate text-sm font-medium ${highlight ? "font-semibold text-dz-green" : "text-ink"}`}
       >

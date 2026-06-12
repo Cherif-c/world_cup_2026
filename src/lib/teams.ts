@@ -1,4 +1,4 @@
-/** Mapping noms français → code ISO pour flagcdn.com */
+/** Mapping noms français → code ISO pour les drapeaux */
 export const TEAM_FLAGS: Record<string, string> = {
   Mexique: "mx",
   "Afrique du Sud": "za",
@@ -50,7 +50,8 @@ export const TEAM_FLAGS: Record<string, string> = {
   Colombie: "co",
 };
 
-export function getFlagUrl(team: string, size = 80): string {
+/** CDN lipis/flag-icons — SVG 4x3, toutes tailles, codes subdivisions OK */
+export function getFlagUrl(team: string): string {
   const code = TEAM_FLAGS[team] ?? "un";
-  return `https://flagcdn.com/w${size}/${code}.png`;
+  return `https://flagicons.lipis.dev/flags/4x3/${code}.svg`;
 }
